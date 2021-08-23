@@ -1,6 +1,7 @@
 package by.it_academy.jd2.Mk_JD2_82_21_chat.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_chat.service.StorageService;
+import by.it_academy.jd2.Mk_JD2_82_21_chat.service.api.EStorageType;
+import by.it_academy.jd2.Mk_JD2_82_21_chat.service.api.IHandleStorage;
 import by.it_academy.jd2.Mk_JD2_82_21_chat.storage.model.Text;
 import by.it_academy.jd2.Mk_JD2_82_21_chat.storage.model.User;
 
@@ -17,13 +18,17 @@ import java.util.LinkedList;
 public class ChatServlet extends HttpServlet {
 
     private static final String SESSION_ATTRIBUTE_PARAM_NAME = "user";
+    private static final String TYPE_STORAGE_PARAM_NAME = "typeOfSave";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        EStorageType storageType = EStorageType.valueOfIgnoreCase(getServletContext().getInitParameter(TYPE_STORAGE_PARAM_NAME));
+        IHandleStorage handler = storageType.getHandler();
+
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute(SESSION_ATTRIBUTE_PARAM_NAME);
-        LinkedList<Text> messages = StorageService.getInstance().getMessages(user);
+        LinkedList<Text> messages = handler.getMessages(user);
         req.setAttribute("messages", messages);
 
         req.getRequestDispatcher("/views/chat.jsp").forward(req, resp);

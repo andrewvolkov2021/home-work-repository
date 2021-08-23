@@ -4,7 +4,7 @@
         <title>Мессенджер: Регистрация</title>
     </head>
     <body>
-        <form action="/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/singUp" method="POST">
+        <form action="/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/singUpCheck" method="POST">
             <h1>Регистрация</h1>
             <p>Для регистрации необходимо заполнить следующие поля</p>
             <p>Логин:</p><input name="login" type="text" placeholder="Введите логин" size="50">

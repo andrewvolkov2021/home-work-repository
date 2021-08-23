@@ -4,7 +4,6 @@ import by.it_academy.jd2.Mk_JD2_82_21_chat.service.StorageService;
 
 import javax.servlet.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class LoginFilter implements Filter {
 

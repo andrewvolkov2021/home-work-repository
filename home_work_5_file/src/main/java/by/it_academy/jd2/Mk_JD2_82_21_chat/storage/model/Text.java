@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 public class Text {
     private String text;
     private User sender;
-    private LocalDateTime date;
+    private String date;
 
-    public Text(String text, User sender, LocalDateTime date) {
+    public Text(String text, User sender, String date) {
         this.text = text;
         this.sender = sender;
         this.date = date;
@@ -22,7 +22,7 @@ public class Text {
         return sender;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 }

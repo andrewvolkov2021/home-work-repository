@@ -3,6 +3,7 @@ package by.it_academy.jd2.Mk_JD2_82_21_chat.controller.servlets;
 import by.it_academy.jd2.Mk_JD2_82_21_chat.service.StorageService;
 import by.it_academy.jd2.Mk_JD2_82_21_chat.service.api.EStorageType;
 import by.it_academy.jd2.Mk_JD2_82_21_chat.service.api.IHandleStorage;
+import by.it_academy.jd2.Mk_JD2_82_21_chat.storage.model.Text;
 import by.it_academy.jd2.Mk_JD2_82_21_chat.storage.model.User;
 
 import javax.servlet.ServletException;
@@ -12,26 +13,36 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
-@WebServlet(name = "SingInCheckServlet", urlPatterns = "/singInCheck")
-public class SingInCheckServlet extends HttpServlet {
+@WebServlet(name = "MessageCheckServlet", urlPatterns = "/messageCheck")
+public class MessageCheckServlet extends HttpServlet {
 
-    private static final String LOGIN_PARAM_NAME = "login";
+    private static final String TEXT_PARAM_NAME = "text";
     private static final String SESSION_ATTRIBUTE_PARAM_NAME = "user";
+    private static final String LOGIN_OF_RECIPIENT_PARAM_NAME = "loginRecipient";
 
     private static final String TYPE_STORAGE_PARAM_NAME = "typeOfSave";
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         EStorageType storageType = EStorageType.valueOfIgnoreCase(getServletContext().getInitParameter(TYPE_STORAGE_PARAM_NAME));
         IHandleStorage handler = storageType.getHandler();
 
-
         HttpSession session = req.getSession();
-        String login = req.getParameter(LOGIN_PARAM_NAME);
-        User user = handler.getUser(login);
-        session.setAttribute(SESSION_ATTRIBUTE_PARAM_NAME, user);
+        User sender = (User) session.getAttribute(SESSION_ATTRIBUTE_PARAM_NAME);
+
+        String loginRecipient = req.getParameter(LOGIN_OF_RECIPIENT_PARAM_NAME);
+        User recipient = handler.getUser(loginRecipient);
+
+        String date = LocalDateTime.now().toString();
+        String message = req.getParameter(TEXT_PARAM_NAME);
+
+        Text text = new Text(message, sender, date);
+
+        handler.setMessage(recipient, text);
+
         resp.sendRedirect("http://localhost:8080/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/message");
     }
 }

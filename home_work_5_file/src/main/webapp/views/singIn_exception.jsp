@@ -4,7 +4,7 @@
         <title>Мессенджер: Вход</title>
     </head>
     <body>
-        <form action="/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/singIn" method="GET">
+        <form action="/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/singInCheck" method="GET">
             <h1>Вход в Мессенджер</h1>
             <p>Для входа необходимо указать логин и пароль</p>
             <p>Логин:</p><input name="login" type="text" placeholder="Введите логин" size="50">

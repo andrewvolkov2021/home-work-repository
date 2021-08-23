@@ -24,10 +24,12 @@ public class ParamFilter implements Filter {
         String lastName = servletRequest.getParameter(LAST_NAME_PARAM_NAME);
         String date = servletRequest.getParameter(DATE_PARAM_NAME);
 
-        if (login == "" || password == "" || firstName == "" || lastName =="" || date == "") {
+        if (login == "" || password == "" || firstName == "" || lastName =="" || date == ""
+                ||login == null || password == null || firstName == null || lastName == null || date == null ) {
             servletRequest.getRequestDispatcher("/views/singUp_param_exception.jsp").forward(servletRequest, servletResponse);
+        } else {
+            filterChain.doFilter(servletRequest, servletResponse);
         }
-        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

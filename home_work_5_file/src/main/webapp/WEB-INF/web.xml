@@ -8,6 +8,10 @@
     <filter>
         <filter-name>EncodingFilter</filter-name>
         <filter-class>by.it_academy.jd2.Mk_JD2_82_21_chat.controller.filters.EncodingFilter</filter-class>
+        <init-param>
+            <param-name>requestEncoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
     </filter>
     <filter>
         <filter-name>ParamFilter</filter-name>
@@ -26,25 +30,47 @@
         <filter-class>by.it_academy.jd2.Mk_JD2_82_21_chat.controller.filters.RecipientFilter</filter-class>
     </filter>
 
+    <filter>
+        <filter-name>SecurityFilter</filter-name>
+        <filter-class>by.it_academy.jd2.Mk_JD2_82_21_chat.controller.filters.SecurityFilter</filter-class>
+    </filter>
+
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
-        <servlet-name>SingUpServlet</servlet-name>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>ParamFilter</filter-name>
-        <servlet-name>SingUpServlet</servlet-name>
+        <servlet-name>SingUpCheckServlet</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
-        <servlet-name>SingUpServlet</servlet-name>
+        <servlet-name>SingUpCheckServlet</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>EntryFilter</filter-name>
-        <servlet-name>SingInServlet</servlet-name>
+        <servlet-name>SingInCheckServlet</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>RecipientFilter</filter-name>
+        <servlet-name>MessageCheckServlet</servlet-name>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>SecurityFilter</filter-name>
+        <servlet-name>ChatServlet</servlet-name>
         <servlet-name>MessageServlet</servlet-name>
     </filter-mapping>
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+        </jsp-property-group>
+    </jsp-config>
+
+    <context-param>
+        <param-name>typeOfSave</param-name>
+        <param-value>memory_of_app</param-value>
+    </context-param>
 
 </web-app>

@@ -4,7 +4,7 @@
         <title>Мессенджер: Отправка сообщений</title>
     </head>
     <body>
-        <form action="/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/message" method="POST">
+        <form action="/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/messageCheck" method="POST">
             <h1>Отправка сообщений</h1>
             <p>Укажите логин получателя сообщения</p>
             <p>Получатель:</p><input name="loginRecipient" type="text" placeholder="Введите логин" size="50">

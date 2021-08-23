@@ -6,7 +6,7 @@
     <body>
         <h1>Добро пожаловать в Мессенджер</h1>
         <p>Для работы в приложении необходимо выполнить аутентификацию</p>
-        <input type="button" onclick="location.href='/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/views/singIn.jsp';" value="Вход">
-        <input type="button" onclick="location.href='/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/views/singUp.jsp';" value="Регистрация">
+        <input type="button" onclick="location.href='/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/singIn';" value="Вход">
+        <input type="button" onclick="location.href='/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/singUp';" value="Регистрация">
     </body>
 </html>
