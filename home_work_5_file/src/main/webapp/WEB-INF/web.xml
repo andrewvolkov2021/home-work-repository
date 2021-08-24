@@ -70,7 +70,7 @@
 
     <context-param>
         <param-name>typeOfSave</param-name>
-        <param-value>memory_of_app</param-value>
+        <param-value>file</param-value>
     </context-param>
 
 </web-app>

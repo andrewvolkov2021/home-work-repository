@@ -9,8 +9,8 @@ import java.util.LinkedList;
 
 public class FileService implements IHandleStorage {
 
-    private static final String PATH_TO_FILE_WITH_USERS = "src/main/resources/users.txt";
-    private static final String PATH_TO_FILE_WITH_MESSAGES = "src/main/resources/messages.txt";
+    private static final String PATH_TO_FILE_WITH_USERS = "users.txt";
+    private static final String PATH_TO_FILE_WITH_MESSAGES = "messages.txt";
     private static final FileService instance = new FileService();
 
     private FileService(){
@@ -24,7 +24,7 @@ public class FileService implements IHandleStorage {
         String lastName = user.getLastName();
         String date = user.getAge();
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_TO_FILE_WITH_USERS, true))){
+         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_TO_FILE_WITH_USERS, true))){
             String userForFile = login + " " + password + " " + firstName + " " + lastName + " " + date + "\n";
             bufferedWriter.write(userForFile);
         } catch (IOException ex) {
@@ -60,7 +60,7 @@ public class FileService implements IHandleStorage {
     public void setMessage(User user, Text text) {
         String login = user.getLogin();
         String sender = text.getSender().getLogin();
-        String date = text.getDate().toString();
+        String date = text.getDate();
         String message = text.getText();
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_TO_FILE_WITH_MESSAGES, true))){
@@ -98,4 +98,5 @@ public class FileService implements IHandleStorage {
     public static FileService getInstance(){
         return instance;
     }
+
 }
