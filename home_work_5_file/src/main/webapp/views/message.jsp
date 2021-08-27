@@ -6,6 +6,10 @@
     <body>
         <form action="/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/messageCheck" method="POST">
             <h1>Отправка сообщений</h1>
+
+            <input type="button" onclick='location.href="http://localhost:8080/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/user"' value="Все пользователи">
+            <input type="button" onclick='location.href="http://localhost:8080/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/about"' value="Об приложении">
+
             <p>Укажите логин получателя сообщения</p>
             <p>Получатель:</p><input name="loginRecipient" type="text" placeholder="Введите логин" size="50">
             <br><br>

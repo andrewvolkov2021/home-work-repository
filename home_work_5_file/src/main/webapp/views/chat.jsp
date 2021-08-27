@@ -5,6 +5,11 @@
     </head>
     <body>
         <h1>Мои сообщения</h1>
+         <input type="button" onclick='location.href="http://localhost:8080/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/user"' value="Все пользователи">
+         <input type="button" onclick='location.href="http://localhost:8080/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/about"' value="Об приложении">
+
+         <hr>
+
         <input type="button" onclick="location.href='/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/views/message.jsp';" value="Написать сообщение">
         <input type="button" onclick="location.href='/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/';" value="Назад"><br><br>
         <input type="button" onclick='location.href="http://localhost:8080/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/chat"' value="Обновить мои сообщения">
