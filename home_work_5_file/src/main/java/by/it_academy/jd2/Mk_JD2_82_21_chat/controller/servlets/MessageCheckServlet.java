@@ -1,6 +1,5 @@
 package by.it_academy.jd2.Mk_JD2_82_21_chat.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_chat.service.StorageService;
 import by.it_academy.jd2.Mk_JD2_82_21_chat.service.api.EStorageType;
 import by.it_academy.jd2.Mk_JD2_82_21_chat.service.api.IHandleStorage;
 import by.it_academy.jd2.Mk_JD2_82_21_chat.storage.model.Text;
@@ -14,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @WebServlet(name = "MessageCheckServlet", urlPatterns = "/messageCheck")
 public class MessageCheckServlet extends HttpServlet {
@@ -36,7 +37,9 @@ public class MessageCheckServlet extends HttpServlet {
         String loginRecipient = req.getParameter(LOGIN_OF_RECIPIENT_PARAM_NAME);
         User recipient = handler.getUser(loginRecipient);
 
-        String date = LocalDateTime.now().toString();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM, dd, yyyy HH:mm:ss", Locale.US);
+        String date = localDateTime.format(formatter);
         String message = req.getParameter(TEXT_PARAM_NAME);
 
         Text text = new Text(message, sender, date);
