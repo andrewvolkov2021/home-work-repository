@@ -46,6 +46,6 @@ public class MessageCheckServlet extends HttpServlet {
 
         handler.setMessage(recipient, text);
 
-        resp.sendRedirect("http://localhost:8080/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/message");
+        resp.sendRedirect("/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/message");
     }
 }

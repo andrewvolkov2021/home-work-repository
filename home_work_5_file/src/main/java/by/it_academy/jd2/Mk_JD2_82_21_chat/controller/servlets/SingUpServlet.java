@@ -14,6 +14,6 @@ public class SingUpServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         req.getRequestDispatcher("/views/singUp.jsp").forward(req, resp);
-        resp.sendRedirect("http://localhost:8080/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/singUpCheck");
+        resp.sendRedirect("/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/singUpCheck");
     }
 }

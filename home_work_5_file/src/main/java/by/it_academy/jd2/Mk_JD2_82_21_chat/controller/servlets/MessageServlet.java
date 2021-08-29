@@ -13,6 +13,6 @@ public class MessageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/views/message.jsp").forward(req, resp);
-        resp.sendRedirect("http://localhost:8080/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/messageCheck");
+        resp.sendRedirect("/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/messageCheck");
     }
 }

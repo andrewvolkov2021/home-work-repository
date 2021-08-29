@@ -32,6 +32,6 @@ public class SingInCheckServlet extends HttpServlet {
         String login = req.getParameter(LOGIN_PARAM_NAME);
         User user = handler.getUser(login);
         session.setAttribute(SESSION_ATTRIBUTE_PARAM_NAME, user);
-        resp.sendRedirect("http://localhost:8080/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/message");
+        resp.sendRedirect("/Mk-JD2-82-21-chat-0.0.0-SNAPSHOT/message");
     }
 }
