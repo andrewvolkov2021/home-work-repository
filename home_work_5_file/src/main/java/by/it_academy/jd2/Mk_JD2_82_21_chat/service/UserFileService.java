@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UserFileService implements IHandleInfo {
-    private static final String PATH_TO_FILE_WITH_USERS = "users.txt";
+    private static final String PATH_TO_FILE_WITH_USERS = "../conf/file/users.txt";
     private static final UserFileService instance = new UserFileService();
 
     private UserFileService(){

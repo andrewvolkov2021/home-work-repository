@@ -37,9 +37,10 @@ public class MessageCheckServlet extends HttpServlet {
         String loginRecipient = req.getParameter(LOGIN_OF_RECIPIENT_PARAM_NAME);
         User recipient = handler.getUser(loginRecipient);
 
-        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDateTime localDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM, dd, yyyy HH:mm:ss", Locale.US);
-        String date = localDateTime.format(formatter);
+        String date = localDate.format(formatter);
+
         String message = req.getParameter(TEXT_PARAM_NAME);
 
         Text text = new Text(message, sender, date);

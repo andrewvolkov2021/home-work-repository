@@ -5,12 +5,14 @@ import by.it_academy.jd2.Mk_JD2_82_21_chat.storage.model.Text;
 import by.it_academy.jd2.Mk_JD2_82_21_chat.storage.model.User;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class FileService implements IHandleStorage {
 
-    private static final String PATH_TO_FILE_WITH_USERS = "users.txt";
-    private static final String PATH_TO_FILE_WITH_MESSAGES = "messages.txt";
+    private static final String DIRECTORY_PARAM_NAME = "../conf/file";
+    private static final String PATH_TO_FILE_WITH_USERS = "../conf/file/users.txt";
+    private static final String PATH_TO_FILE_WITH_MESSAGES = "../conf/file/messages.txt";
     private static final FileService instance = new FileService();
 
     private FileService(){
@@ -18,13 +20,21 @@ public class FileService implements IHandleStorage {
 
     @Override
     public void saveNewUser(User user) {
+
+        File directory = new File(DIRECTORY_PARAM_NAME);
+        File file = new File(PATH_TO_FILE_WITH_USERS);
+
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+
         String login = user.getLogin();
         String password = user.getPassword();
         String firstName = user.getFirstName();
         String lastName = user.getLastName();
         String date = user.getAge();
 
-         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_TO_FILE_WITH_USERS, true))){
+         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true))){
             String userForFile = login + " " + password + " " + firstName + " " + lastName + " " + date + "\n";
             bufferedWriter.write(userForFile);
         } catch (IOException ex) {
@@ -58,6 +68,14 @@ public class FileService implements IHandleStorage {
 
     @Override
     public void setMessage(User user, Text text) {
+
+        File directory = new File(DIRECTORY_PARAM_NAME);
+        File file = new File(PATH_TO_FILE_WITH_MESSAGES);
+
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+
         String login = user.getLogin();
         String sender = text.getSender().getLogin();
         String date = text.getDate();
@@ -81,8 +99,18 @@ public class FileService implements IHandleStorage {
                 if (line.startsWith(login.toLowerCase())) {
                     String[] array = line.split(" ");
                     String senderLogin = array[1];
-                    String date = array[2];
-                    String message = array[3];
+
+                    String[] arrayDate = Arrays.copyOfRange(array, 2, 6);
+                    String date = "";
+                    for (String item : arrayDate) {
+                        date = date + item + " ";
+                    }
+
+                    String[] arrayMessage = Arrays.copyOfRange(array, 6, array.length);
+                    String message = "";
+                    for (String item : arrayMessage) {
+                        message = message + item + " ";
+                    }
 
                     User sender = getUser(senderLogin);
 
