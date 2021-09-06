@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_chat.controller.filters;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.filters;
 
 import javax.servlet.*;
 import java.io.IOException;

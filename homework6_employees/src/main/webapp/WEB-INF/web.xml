@@ -7,7 +7,7 @@
 
     <filter>
         <filter-name>EncodingFilter</filter-name>
-        <filter-class>by.it_academy.jd2.Mk_JD2_82_21_chat.controller.filters.EncodingFilter</filter-class>
+        <filter-class>by.it_academy.jd2.Mk_JD2_82_21_employees.controller.filters.EncodingFilter</filter-class>
         <init-param>
             <param-name>requestEncoding</param-name>
             <param-value>UTF-8</param-value>
