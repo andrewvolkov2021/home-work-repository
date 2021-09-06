@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>by.it-academy.jd2</groupId>
-    <artifactId>Mk_JD2_82_21_employees</artifactId>
+    <artifactId>Mk-JD2-82-21-employees</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
