@@ -10,9 +10,10 @@
             <p>Имя:</p><input name="name" type="text" placeholder="Введите имя сотрудника" size="50">
             <p>Зарплата:</p><input name="salary" type="text" placeholder="Укажите зарплату сотрудника" size="50">
 
-        <br><br><br><br>
+        <br>
+        <p style = "color:Red">Внимание!!! Не был указан один из обязательных параметров</p>
+        <br>
 
-        <input type="submit" value="Добавить"/>
-         <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employee';" value="Карточка пользователя">
+         <input type="submit" value="Добавить"/>
     </form>
 </html>

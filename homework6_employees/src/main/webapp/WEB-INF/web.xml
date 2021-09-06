@@ -13,10 +13,18 @@
             <param-value>UTF-8</param-value>
         </init-param>
     </filter>
+    <filter>
+        <filter-name>EmployeeParamFilter</filter-name>
+        <filter-class>by.it_academy.jd2.Mk_JD2_82_21_employees.controller.filters.EmployeeParamFilter</filter-class>
+    </filter>
 
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>EmployeeParamFilter</filter-name>
+        <servlet-name>AddEmployeeServlet</servlet-name>
     </filter-mapping>
 
 </web-app>
