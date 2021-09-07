@@ -1,13 +1,18 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
     <head>
-        <title>ID нового сотрудника</title>
+        <title>Карточка пользователя</title>
     </head>
     <body>
-        <h1>Уведомление</h1>
-        <p>Новый сотрудник успешно добавлен в базу двнных</p>
-        ${'ID нового сотрудника - '}
-        ${id}
+        <h1>Карточка пользователя</h1>
+        ${'ID пользователя: '}
+        ${employee.getId()}<br>
+
+        ${'Имя: '}
+        ${employee.getName()}<br>
+
+        ${'Зарплата: '}
+        ${employee.getSalary()}<br>
 
         <br><br>
 

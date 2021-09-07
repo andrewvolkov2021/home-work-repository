@@ -13,6 +13,6 @@
         <br><br><br><br>
 
         <input type="submit" value="Добавить"/>
-         <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employee';" value="Карточка пользователя">
+        <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/getCard';" value="Карточка пользователя">
     </form>
 </html>

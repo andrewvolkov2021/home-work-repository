@@ -17,7 +17,7 @@ public class EmployeeParamFilter implements Filter {
         String name = request.getParameter(NAME_EMPLOYEE_PARAM_NAME);
         String salary = request.getParameter(SALARY_PARAM_NAME);
 
-        if (name.equals("") || salary.equals("")){
+        if (name.equals("") || name == null || salary.equals("") || salary == null){
             request.getRequestDispatcher("/views/start_exception.jsp").forward(request, response);
         }
         chain.doFilter(request, response);
