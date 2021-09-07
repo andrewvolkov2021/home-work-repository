@@ -17,4 +17,14 @@
          <input type="submit" value="Добавить"/>
          <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/getCard';" value="Карточка пользователя">
     </form>
+
+    <br><hr>
+
+    <form action="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/autoFill" method="POST">
+        <p>Автомантическое заполнение базы</p>
+        <p>Количество сотрудников:</p><input name="name" type="count" placeholder="Введите количество сотрудников" size="50">
+        <br><br>
+        <input type="submit" value="Добавить сотрудников"/>
+    </form>
+    </body>
 </html>

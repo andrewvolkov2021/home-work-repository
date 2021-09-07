@@ -21,7 +21,11 @@
     <form action="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/autoFill" method="POST">
         <p>Автомантическое заполнение базы</p>
         <p>Количество сотрудников:</p><input name="count" type="number" placeholder="Введите количество сотрудников" size="50">
-        <br><br>
+
+        <br>
+        <p style = "color:Red">Внимание!!! Не было указанно количество сотрудников</p>
+        <br>
+
         <input type="submit" value="Добавить сотрудников"/>
     </form>
     </body>
