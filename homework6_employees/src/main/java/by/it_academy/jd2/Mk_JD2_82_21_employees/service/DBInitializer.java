@@ -62,7 +62,6 @@ public class DBInitializer {
                 long id = idEmployee;
                 String name = resultSet.getString(2);
                 Double salary = resultSet.getDouble(3);
-
                 employee = new Employee(id, name, salary);
             }
 
