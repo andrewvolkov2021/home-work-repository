@@ -24,7 +24,7 @@ public class DBDepartmentReader {
     public List<Department> getListOfDepartments(){
         List<Department> listOfDepartments = new ArrayList<>();
         try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
-             Statement statement = con.createStatement();
+             Statement statement = con.createStatement()
         ){
             try(ResultSet resultSet = statement.executeQuery("SELECT id, name_department, parental_department " +
                     "FROM application.departments")){
