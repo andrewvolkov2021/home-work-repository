@@ -9,6 +9,9 @@ public class Employee {
     private Department department;
     private Position position;
 
+    public Employee() {
+    }
+
     public Employee(long id, String name, double salary) {
         this.id = id;
         this.name = name;

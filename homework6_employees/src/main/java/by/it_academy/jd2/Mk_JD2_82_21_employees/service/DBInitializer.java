@@ -1,5 +1,6 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
 
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.DBNewInitializer;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Employee;
 
 import java.sql.*;
@@ -20,9 +21,7 @@ public class DBInitializer {
 
     public long addEmployee(String name, double salary) {
         long id;
-        try (Connection con = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/employees",
-                "postgres", "mir2020mir")
+        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection()
              ) {
 
             try (PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO application.employees(\n" +
@@ -50,9 +49,7 @@ public class DBInitializer {
     public Employee getEmployee(long idEmployee){
         Employee employee;
         String sgl = "SELECT id, name, salary FROM application.employees WHERE id =" + idEmployee;
-        try (Connection connection = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/employees",
-                "postgres", "mir2020mir");
+        try (Connection connection = DBNewInitializer.getPoolDataSource().getConnection();
              Statement statement = connection.createStatement();
         ) {
 

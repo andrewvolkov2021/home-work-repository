@@ -3,12 +3,16 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model;
 public class Department {
     private long id;
     private String name;
-    private String parentalName;
+    private Department parentalDepartment;
 
-    public Department(long id, String name, String parentalName) {
+    public Department(String name) {
+        this.name = name;
+    }
+
+    public Department(long id, String name, Department parentalDepartment) {
         this.id = id;
         this.name = name;
-        this.parentalName = parentalName;
+        this.parentalDepartment = parentalDepartment;
     }
 
     public long getId() {
@@ -19,7 +23,7 @@ public class Department {
         return name;
     }
 
-    public String getParentalName() {
-        return parentalName;
+    public Department getParentalDepartment() {
+        return parentalDepartment;
     }
 }

@@ -1,5 +1,6 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
 
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.DBNewInitializer;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -40,9 +41,7 @@ public class DBFiller {
     public void autoAddingOfEmployees(int count) {
         String[] arrayName = getArrayOfNames();
 
-        try (Connection con = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/employees",
-                "postgres", "mir2020mir");
+        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
              PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO application.employees(\n" +
                      "name, salary, department, position)\n" + "VALUES (?, ?, ?, ?);")
         ){
