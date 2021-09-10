@@ -1,7 +1,7 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.readers;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.DBNewInitializer;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Department;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.initialiazers.DBNewInitializer;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -55,13 +55,8 @@ public class DBDepartmentReader {
                 while (resultSet.next()){
                     String name = resultSet.getString(2);
                     long parentalId = resultSet.getLong(3);
-                    Department parentalDepartment;
 
-                    if ( parentalId == 0) {
-                        parentalDepartment = new Department("\"Родительский отдел не указан\"");
-                    } else {
-                        parentalDepartment = getDepartment(parentalId);
-                    }
+                    Department parentalDepartment = getDepartment(parentalId);
                     department = new Department(id, name, parentalDepartment);
                 }
             }

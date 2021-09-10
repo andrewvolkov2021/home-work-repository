@@ -1,6 +1,6 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.DBPositionReader;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.readers.DBPositionReader;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Position;
 
 import javax.servlet.ServletException;

@@ -1,6 +1,6 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.DBEmployeeReader;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.readers.DBEmployeeReader;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Employee;
 
 import javax.servlet.ServletException;

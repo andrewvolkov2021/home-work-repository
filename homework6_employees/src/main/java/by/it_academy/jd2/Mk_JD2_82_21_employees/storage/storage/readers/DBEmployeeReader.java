@@ -1,9 +1,9 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.readers;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.DBNewInitializer;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Department;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Employee;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Position;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.initialiazers.DBNewInitializer;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

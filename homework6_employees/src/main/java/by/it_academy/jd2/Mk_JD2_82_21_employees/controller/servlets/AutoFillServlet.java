@@ -1,6 +1,7 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.DBFiller;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.DBFillerService;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.fillers.DBEmployeeFiller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +18,7 @@ public class AutoFillServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int count = Integer.parseInt(req.getParameter(EMPLOYEE_COUNT_PARAM_MANE));
-        DBFiller.getInstance().autoAddingOfEmployees(count);
+        DBFillerService.getInstance().fillDateBase(count);
 
         req.getRequestDispatcher("/views/start.jsp").forward(req, resp);
     }

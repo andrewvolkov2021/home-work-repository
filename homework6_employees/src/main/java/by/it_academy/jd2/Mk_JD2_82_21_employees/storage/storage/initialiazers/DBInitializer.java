@@ -1,7 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
-
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.DBNewInitializer;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Employee;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.initialiazers;
 
 import java.sql.*;
 
@@ -36,28 +33,6 @@ public class DBInitializer {
             throw new IllegalStateException("Ошибка при работе с базой данных", ex);
         }
         return id;
-    }
-
-    public Employee getEmployee(long idEmployee){
-        Employee employee;
-        String sgl = "SELECT id, name, salary FROM application.employees WHERE id =" + idEmployee;
-        try (Connection connection = DBNewInitializer.getPoolDataSource().getConnection();
-             Statement statement = connection.createStatement();
-        ) {
-
-            try(ResultSet resultSet = statement.executeQuery(sgl)){
-                resultSet.next();
-
-                long id = idEmployee;
-                String name = resultSet.getString(2);
-                Double salary = resultSet.getDouble(3);
-                employee = new Employee(id, name, salary);
-            }
-
-        } catch (SQLException ex) {
-            throw new IllegalStateException("Ошибка при работе с базой данных", ex);
-        }
-        return employee;
     }
 
     public static DBInitializer getInstance() {
