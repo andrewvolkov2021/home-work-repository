@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class IDFilter implements Filter {
 
-    private static final String ID_PARAM_NAME = "id_employee";
+    private static final String ID_PARAM_NAME = "id";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

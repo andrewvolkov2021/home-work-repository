@@ -4,37 +4,37 @@
         <title>Добавление сотрудников</title>
     </head>
     <body>
-    <form action="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/addEmployee" method="POST">
-        <h1>Добавление сотрудника в базу данных</h1>
-        <p>Для добавления сотрудника необходимо указать имя и зарплату</p>
+
+        <h1>База данных Employees</h1>
+        <h2>Добавление сотрудника в базу данных</h2>
+        <form action="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/addEmployee" method="POST">
+            <p>Для добавления сотрудника в базу данных необходимо указать обязательные параметры: имя и зарплату</p>
             <p>Имя:</p><input name="name" type="text" placeholder="Введите имя сотрудника" size="50">
-            <p>Зарплата:</p><input name="salary" type="text" placeholder="Укажите зарплату сотрудника" size="50">
+            <p>Зарплата:</p><input name="salary" type="number" " min="0" max="99999999.99" step="0.01" placeholder="Зарплата" size="50">
+            <br><br><br>
+            <input type="submit" value="Добавить"/>
+            <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/getCard';" value="Карточка пользователя">
+        </form>
 
-        <br><br><br><br>
+        <hr>
 
-        <input type="submit" value="Добавить"/>
-        <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/getCard';" value="Карточка пользователя">
-    </form>
+        <h2>Автомантическое заполнение базы данных</h2>
+        <p>Для автоматического заполнения базы данных необходимоуказать количество сотрудников</p>
+        <form action="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/autoFill" method="POST">
+            <p>Количество сотрудников:</p><input name="count" type="number" placeholder="Количество" size="50">
 
-    <br><hr>
+            <br>
+            <p style = "color:Red">Внимание!!! Не было указанно количество сотрудников</p>
 
-    <form action="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/autoFill" method="POST">
-        <p>Автомантическое заполнение базы</p>
-        <p>Количество сотрудников:</p><input name="count" type="number" placeholder="Введите количество сотрудников" size="50">
 
-        <br>
-        <p style = "color:Red">Внимание!!! Не было указанно количество сотрудников</p>
-        <br>
+            <input type="submit" value="Добавить сотрудников"/>
+        </form>
 
-        <input type="submit" value="Добавить сотрудников"/>
-    </form>
-
-        <br><hr>
+        <hr>
         <p>Получить из базы список отделов/должностей/сотрудников </p>
-
         <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/listOfDepartments';" value="Список отделов">
         <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/listOfPositions';" value="Список должностей">
         <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/listOfEmployees';" value="Список сотрудников">
-        </body>
+
     </body>
 </html>
