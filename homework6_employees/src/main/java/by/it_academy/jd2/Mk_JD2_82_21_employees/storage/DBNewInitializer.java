@@ -16,6 +16,7 @@ public class DBNewInitializer {
         cpds.setJdbcUrl("jdbc:postgresql://localhost:5432/employees");
         cpds.setUser("postgres");
         cpds.setPassword("mir2020mir");
+
         return cpds;
     }
 }

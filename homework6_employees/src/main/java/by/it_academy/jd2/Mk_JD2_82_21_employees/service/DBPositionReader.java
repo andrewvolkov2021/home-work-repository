@@ -17,14 +17,6 @@ public class DBPositionReader {
     private DBPositionReader(){
     }
 
-    static {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException ex) {
-            throw new IllegalStateException("Ошибка загрузки драйвера", ex);
-        }
-    }
-
     public List<Position> getListOfPosition(){
         List<Position> listOfPositions = new ArrayList<>();
         try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();

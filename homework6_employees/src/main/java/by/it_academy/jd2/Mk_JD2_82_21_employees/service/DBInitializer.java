@@ -11,14 +11,6 @@ public class DBInitializer {
     private DBInitializer(){
     }
 
-    static {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException ex) {
-            throw new IllegalStateException("Ошибка загрузки драйвера", ex);
-        }
-    }
-
     public long addEmployee(String name, double salary) {
         long id;
         try (Connection con = DBNewInitializer.getPoolDataSource().getConnection()

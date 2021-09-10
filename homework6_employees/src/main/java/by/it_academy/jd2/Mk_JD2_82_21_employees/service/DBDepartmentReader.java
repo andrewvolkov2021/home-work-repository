@@ -13,14 +13,6 @@ public class DBDepartmentReader {
     private DBDepartmentReader(){
     }
 
-    static {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException ex) {
-            throw new IllegalStateException("Ошибка загрузки драйвера", ex);
-        }
-    }
-
     public List<Department> getListOfDepartments(){
         List<Department> listOfDepartments = new ArrayList<>();
         try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();

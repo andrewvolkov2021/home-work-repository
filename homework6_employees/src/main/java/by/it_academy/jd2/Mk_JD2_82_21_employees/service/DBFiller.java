@@ -30,14 +30,6 @@ public class DBFiller {
     private DBFiller(){
     }
 
-    static {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException ex) {
-            throw new IllegalStateException("Ошибка загрузки драйвера", ex);
-        }
-    }
-
     public void autoAddingOfEmployees(int count) {
         String[] arrayName = getArrayOfNames();
 
