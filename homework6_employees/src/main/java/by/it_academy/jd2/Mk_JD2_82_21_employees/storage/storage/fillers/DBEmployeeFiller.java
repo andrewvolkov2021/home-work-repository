@@ -30,7 +30,7 @@ public class DBEmployeeFiller {
     public void autoAddingOfEmployees(int count, Long[] departmentId, Long[] positionId) {
         String[] arrayName = getArrayOfNames();
 
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO application.employees(\n" +
                      "name, salary, department, position)\n" + "VALUES (?, ?, ?, ?);")
         ){

@@ -20,7 +20,7 @@ public class DBEmployeeReader {
 
     public List<Employee> getListOfEmployee(){
         List<Employee> listOfEmployees = new ArrayList<>();
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              Statement statement = con.createStatement()
         ){
             try(ResultSet resultSet = statement.executeQuery("SELECT id, name, salary, department, position " +
@@ -50,7 +50,7 @@ public class DBEmployeeReader {
         Employee employee = null;
 
         String sql = "SELECT id, name, salary, department, position FROM application.employees WHERE id = " + id;
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              Statement statement = con.createStatement();
         ){
             try(ResultSet resultSet = statement.executeQuery(sql)){

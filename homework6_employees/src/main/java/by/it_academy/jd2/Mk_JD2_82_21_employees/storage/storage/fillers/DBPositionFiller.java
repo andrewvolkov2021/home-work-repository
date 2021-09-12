@@ -25,7 +25,7 @@ public class DBPositionFiller {
     }
 
     public void autoAddingPositions(){
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO application.positions(\n" +
                      "name_position)\n" + "VALUES (?);")
         ){
@@ -75,7 +75,7 @@ public class DBPositionFiller {
 
     public Long[] getArrayOfPositionId(){
         List<Long> listOfPositionId = new ArrayList<>();
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              Statement statement = con.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT id FROM application.positions")
         ){

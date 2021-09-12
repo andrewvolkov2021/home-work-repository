@@ -18,7 +18,7 @@ public class DBPositionReader {
 
     public List<Position> getListOfPosition(){
         List<Position> listOfPositions = new ArrayList<>();
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              Statement statement = con.createStatement()
         ){
             try(ResultSet resultSet = statement.executeQuery("SELECT id, name_position " +
@@ -43,7 +43,7 @@ public class DBPositionReader {
 
         String sql = "SELECT id, name_position FROM application.positions " +
                 "WHERE id = " + id;
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              Statement statement = con.createStatement();
         ){
             try(ResultSet resultSet = statement.executeQuery(sql)){

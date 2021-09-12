@@ -31,7 +31,7 @@ public class DBDepartmentFiller {
     }
 
     private void autoAddingDepartmentName(){
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO application.departments(\n" +
                      "name_department)\n" + "VALUES (?);")
         ){
@@ -81,7 +81,7 @@ public class DBDepartmentFiller {
 
     public Long[] getArrayOfDepartmentId(){
         List<Long> listOfDepartmentId = new ArrayList<>();
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              Statement statement = con.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT id FROM application.departments")
         ){
@@ -98,7 +98,7 @@ public class DBDepartmentFiller {
 
 
     private void autoAddingParentalDepartment(Long[] array){
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
         ){
             for (int i = 0; i < array.length; i++) {
                 long departmentId = array[i];

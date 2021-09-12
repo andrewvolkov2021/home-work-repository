@@ -10,7 +10,7 @@ public class DBInitializer {
 
     public long addEmployee(String name, double salary) {
         long id;
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection()
+        try (Connection con = DBNewInitializer.getConnection()
              ) {
 
             try (PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO application.employees(\n" +

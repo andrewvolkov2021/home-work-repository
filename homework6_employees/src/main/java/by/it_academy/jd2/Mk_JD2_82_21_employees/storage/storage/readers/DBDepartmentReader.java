@@ -15,7 +15,7 @@ public class DBDepartmentReader {
 
     public List<Department> getListOfDepartments(){
         List<Department> listOfDepartments = new ArrayList<>();
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              Statement statement = con.createStatement()
         ){
             try(ResultSet resultSet = statement.executeQuery("SELECT id, name_department, parental_department " +
@@ -47,7 +47,7 @@ public class DBDepartmentReader {
 
         String sql = "SELECT id, name_department, parental_department FROM application.departments " +
                 "WHERE id = " + id;
-        try (Connection con = DBNewInitializer.getPoolDataSource().getConnection();
+        try (Connection con = DBNewInitializer.getConnection();
              Statement statement = con.createStatement();
         ){
             try(ResultSet resultSet = statement.executeQuery(sql)){
