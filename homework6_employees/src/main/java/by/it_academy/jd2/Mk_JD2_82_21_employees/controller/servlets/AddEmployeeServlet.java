@@ -1,6 +1,6 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.initialiazers.DBInitializer;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.AddEmployeeService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +20,7 @@ public class AddEmployeeServlet extends HttpServlet {
         String name = req.getParameter(NAME_EMPLOYEE_PARAM_NAME);
         double salary = Double.parseDouble(req.getParameter(SALARY_PARAM_NAME));
 
-        long id = DBInitializer.getInstance().addEmployee(name, salary);
+        long id = AddEmployeeService.getInstance().addNewEmployee(name, salary);
         req.setAttribute("id", id);
         req.getRequestDispatcher("/views/newID.jsp").forward(req, resp);
     }

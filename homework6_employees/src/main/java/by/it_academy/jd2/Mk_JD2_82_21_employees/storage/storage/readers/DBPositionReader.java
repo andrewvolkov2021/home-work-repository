@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DBPositionReader {
     private static DBPositionReader instance = new DBPositionReader();
@@ -57,6 +59,28 @@ public class DBPositionReader {
             throw new IllegalStateException("Ошибка при работе с базой данных", ex);
         }
         return position;
+    }
+
+    public Map<Long, Position> getMapOfPositions(){
+        Map<Long, Position> mapOfPositions = new HashMap<>();
+        try (Connection con = DBNewInitializer.getConnection();
+             Statement statement = con.createStatement()
+        ){
+            try(ResultSet resultSet = statement.executeQuery("SELECT id, name_position " +
+                    "FROM application.positions")){
+
+                while (resultSet.next()){
+                    long id = resultSet.getLong(1);
+                    String name = resultSet.getString(2);
+
+                    Position position = new Position(id, name);
+                    mapOfPositions.put(id, position);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new IllegalStateException("Ошибка при работе с базой данных", ex);
+        }
+        return mapOfPositions;
     }
 
     public static DBPositionReader getInstance(){

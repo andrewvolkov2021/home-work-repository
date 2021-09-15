@@ -5,7 +5,9 @@ import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.initialiazers.DB
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DBDepartmentReader {
     private static DBDepartmentReader instance = new DBDepartmentReader();
@@ -26,11 +28,7 @@ public class DBDepartmentReader {
                     String name = resultSet.getString(2);
                     long parentalId = resultSet.getLong(3);
                     Department parentalDepartment;
-                    if ( parentalId == 0) {
-                        parentalDepartment = new Department("\"Родительский отдел не указан\"");
-                    } else {
-                        parentalDepartment = getDepartment(parentalId);
-                    }
+                    parentalDepartment = getDepartment(parentalId);
 
                     Department department = new Department(id, name, parentalDepartment);
                     listOfDepartments.add(department);
@@ -64,6 +62,31 @@ public class DBDepartmentReader {
             throw new IllegalStateException("Ошибка при работе с базой данных", ex);
         }
         return department;
+    }
+
+    public Map<Long, Department> getMapOfDepartments(){
+        Map<Long, Department> mapOfDepartments = new HashMap<>();
+        try (Connection con = DBNewInitializer.getConnection();
+             Statement statement = con.createStatement()
+        ){
+            try(ResultSet resultSet = statement.executeQuery("SELECT id, name_department, parental_department " +
+                    "FROM application.departments")){
+
+                while (resultSet.next()){
+                    long id = resultSet.getLong(1);
+                    String name = resultSet.getString(2);
+                    long parentalId = resultSet.getLong(3);
+                    Department parentalDepartment;
+                    parentalDepartment = getDepartment(parentalId);
+                    Department department = new Department(id, name, parentalDepartment);
+
+                    mapOfDepartments.put(id, department);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new IllegalStateException("Ошибка при работе с базой данных", ex);
+        }
+        return mapOfDepartments;
     }
 
     public static DBDepartmentReader getInstance(){

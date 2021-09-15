@@ -1,6 +1,6 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.readers.DBPositionReader;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.PositionService;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Position;
 
 import javax.servlet.ServletException;
@@ -18,7 +18,7 @@ public class PositionCardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long id = Long.parseLong(req.getParameter(ID_POSITION_PARAM_NAME));
-        Position position = DBPositionReader.getInstance().getPosition(id);
+        Position position = PositionService.getInstance().getPosition(id);
         req.setAttribute("position", position);
         req.getRequestDispatcher("/views/positionCard.jsp").forward(req, resp);
     }

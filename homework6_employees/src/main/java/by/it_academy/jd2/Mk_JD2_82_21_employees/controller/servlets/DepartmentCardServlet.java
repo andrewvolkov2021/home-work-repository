@@ -1,6 +1,6 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.readers.DBDepartmentReader;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.DepartmentService;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Department;
 
 import javax.servlet.ServletException;
@@ -18,7 +18,7 @@ public class DepartmentCardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long id = Long.parseLong(req.getParameter(ID_DEPARTMENT_PARAM_NAME));
-        Department department = DBDepartmentReader.getInstance().getDepartment(id);
+        Department department = DepartmentService.getInstance().getDepartment(id);
         req.setAttribute("department", department);
         req.getRequestDispatcher("/views/departmentCard.jsp").forward(req, resp);
     }

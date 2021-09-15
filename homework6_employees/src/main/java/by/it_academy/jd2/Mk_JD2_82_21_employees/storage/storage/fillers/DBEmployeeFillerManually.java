@@ -1,11 +1,13 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.initialiazers;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.fillers;
+
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.initialiazers.DBNewInitializer;
 
 import java.sql.*;
 
-public class DBInitializer {
-    private static DBInitializer instance = new DBInitializer();
+public class DBEmployeeFillerManually {
+    private static DBEmployeeFillerManually instance = new DBEmployeeFillerManually();
 
-    private DBInitializer(){
+    private DBEmployeeFillerManually(){
     }
 
     public long addEmployee(String name, double salary) {
@@ -35,7 +37,7 @@ public class DBInitializer {
         return id;
     }
 
-    public static DBInitializer getInstance() {
+    public static DBEmployeeFillerManually getInstance() {
         return instance;
     }
 }

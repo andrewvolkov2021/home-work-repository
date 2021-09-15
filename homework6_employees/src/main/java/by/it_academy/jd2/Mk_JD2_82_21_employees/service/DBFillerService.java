@@ -14,9 +14,7 @@ public class DBFillerService {
     public void fillDateBase(int countEmployee){
         DBPositionFiller.getInstance().autoAddingPositions();
         Long[] arrayOfPositionId = DBPositionFiller.getInstance().getArrayOfPositionId();
-
         Long[] arrayOfDepartmentId = DBNewDepartmentFiller.getInstance().autoAddingDepartment();
-
         DBEmployeeFiller.getInstance().autoAddingOfEmployees(countEmployee,arrayOfDepartmentId, arrayOfPositionId);
     }
 

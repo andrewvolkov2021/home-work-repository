@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DBEmployeeReader {
     private static DBEmployeeReader instance = new DBEmployeeReader();
@@ -18,7 +19,8 @@ public class DBEmployeeReader {
     private DBEmployeeReader(){
     }
 
-    public List<Employee> getListOfEmployee(){
+    public List<Employee> getListOfEmployee(Map<Long, Department> mapOfDepartments,
+                                            Map<Long, Position> mapOfPositions){
         List<Employee> listOfEmployees = new ArrayList<>();
         try (Connection con = DBNewInitializer.getConnection();
              Statement statement = con.createStatement()
@@ -33,8 +35,8 @@ public class DBEmployeeReader {
                     long idDepartment = resultSet.getLong(4);
                     long idPosition = resultSet.getLong(5);
 
-                    Department department = DBDepartmentReader.getInstance().getDepartment(idDepartment);
-                    Position position = DBPositionReader.getInstance().getPosition(idPosition);
+                    Department department = mapOfDepartments.get(idDepartment);
+                    Position position = mapOfPositions.get(idPosition);
 
                     Employee employee = new Employee(id, name, salary, department, position);
                     listOfEmployees.add(employee);
@@ -46,7 +48,8 @@ public class DBEmployeeReader {
         return listOfEmployees;
     }
 
-    public Employee getEmployee(long id){
+    public Employee getEmployee(long id, Map<Long, Department> mapOfDepartments,
+                                Map<Long, Position> mapOfPositions){
         Employee employee = null;
 
         String sql = "SELECT id, name, salary, department, position FROM application.employees WHERE id = " + id;
@@ -61,8 +64,8 @@ public class DBEmployeeReader {
                     long idDepartment = resultSet.getLong(4);
                     long idPosition = resultSet.getLong(5);
 
-                    Department department = DBDepartmentReader.getInstance().getDepartment(idDepartment);
-                    Position position = DBPositionReader.getInstance().getPosition(idPosition);
+                    Department department = mapOfDepartments.get(idDepartment);
+                    Position position = mapOfPositions.get(idPosition);
 
                     employee = new Employee(id, name, salary, department, position);
                 }
