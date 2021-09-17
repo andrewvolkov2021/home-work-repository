@@ -25,6 +25,6 @@
         </table>
         <br><br>
         <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/';" value="Назад">
-        <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/listOfEmployees';" value="Назад к списку">
+        <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employeesPage';" value="Назад к списку">
     </body>
 </html>

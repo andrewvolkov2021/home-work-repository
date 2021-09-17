@@ -33,7 +33,7 @@
         <p>Получить из базы список отделов/должностей/сотрудников </p>
         <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/listOfDepartments';" value="Список отделов">
         <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/listOfPositions';" value="Список должностей">
-        <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/listOfEmployees';" value="Список сотрудников">
+        <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employeesPage';" value="Список сотрудников">
 
     </body>
 </html>
