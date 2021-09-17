@@ -7,10 +7,10 @@
         <h1>Список сотрудников</h1>
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-        <ol>
-        <c:forEach items="${listOfEmployees}" var="item" >
-        <li><a href="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/newEmployeeCard?id=${item.getId()}">${item.getName()}<a/></li>
-        </c:forEach>
+        <ol start = "${startPosition}">
+            <c:forEach items="${listOfEmployees}" var="item" >
+                <li><a href="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/newEmployeeCard?id=${item.getId()}">${item.getName()}<a/></li>
+            </c:forEach>
         </ol>
 
         <a href="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employeesPage"> ${" 1 "} <a/>

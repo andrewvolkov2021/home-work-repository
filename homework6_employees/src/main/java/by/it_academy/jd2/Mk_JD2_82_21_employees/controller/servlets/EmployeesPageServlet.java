@@ -27,6 +27,9 @@ public class EmployeesPageServlet extends HttpServlet {
         } else {
             page = Long.parseLong(req.getParameter(NUMBER_PAGE_PARAM_NAME));
         }
+        long startPosition = (page - 1) * COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE + 1;
+        req.setAttribute("startPosition", startPosition);
+
 
         List<Employee> listOfEmployees = SelectEmployeeService.getInstance().getSelectListOfEmployee(
                 COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE, page);
