@@ -3,17 +3,14 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.readers;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Position;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.initialiazers.DBNewInitializer;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DBPositionReader {
-    private static DBPositionReader instance = new DBPositionReader();
+    private static final DBPositionReader instance = new DBPositionReader();
 
     private DBPositionReader(){
     }
@@ -43,12 +40,13 @@ public class DBPositionReader {
     public Position getPosition(long id){
         Position position = null;
 
-        String sql = "SELECT id, name_position FROM application.positions " +
-                "WHERE id = " + id;
         try (Connection con = DBNewInitializer.getConnection();
-             Statement statement = con.createStatement();
+             PreparedStatement preparedStatement = con.prepareStatement("SELECT id, name_position " +
+                     "FROM application.positions WHERE id = ?");
         ){
-            try(ResultSet resultSet = statement.executeQuery(sql)){
+            preparedStatement.setLong(1, id);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
 
                 while (resultSet.next()){
                     String name = resultSet.getString(2);

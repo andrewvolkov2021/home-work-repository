@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DBDepartmentReader {
-    private static DBDepartmentReader instance = new DBDepartmentReader();
+    private static final DBDepartmentReader instance = new DBDepartmentReader();
 
     private DBDepartmentReader(){
     }
@@ -43,12 +43,13 @@ public class DBDepartmentReader {
     public Department getDepartment(long id){
         Department department = null;
 
-        String sql = "SELECT id, name_department, parental_department FROM application.departments " +
-                "WHERE id = " + id;
         try (Connection con = DBNewInitializer.getConnection();
-             Statement statement = con.createStatement();
+             PreparedStatement preparedStatement = con.prepareStatement("SELECT id, name_department, parental_department" +
+                     " FROM application.departments WHERE id = ? ");
         ){
-            try(ResultSet resultSet = statement.executeQuery(sql)){
+            preparedStatement.setLong(1, id);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
 
                 while (resultSet.next()){
                     String name = resultSet.getString(2);

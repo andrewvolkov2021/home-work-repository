@@ -21,7 +21,7 @@ import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
 import static org.apache.poi.ss.usermodel.CellType.STRING;
 
 public class DBNewDepartmentFiller {
-    private static DBNewDepartmentFiller instance = new DBNewDepartmentFiller();
+    private static final DBNewDepartmentFiller instance = new DBNewDepartmentFiller();
 
     private static final String DIRECTORY_WITH_FILES_PARAM_NAME = "../conf/file";
     private static final String FILE_WITH_DEPARTMENT_PARAM_NAME = "newListDepartment.xlsx";
@@ -120,8 +120,7 @@ public class DBNewDepartmentFiller {
         } catch (IOException e) {
             System.out.println("Ошибка при чтении файла xlsx");
         }
-        Integer[] arrayOfParentalDepartment= listParentalDepartment.toArray(new Integer[0]);
-        return arrayOfParentalDepartment;
+        return listParentalDepartment.toArray(new Integer[0]);
     }
 
     public Long[] getArrayOfDepartmentId(){
@@ -137,15 +136,13 @@ public class DBNewDepartmentFiller {
         }  catch (SQLException ex) {
             throw new IllegalStateException("Ошибка при работе с базой данных", ex);
         }
-        Long[] arrayOfDepartmentId = listOfDepartmentId.toArray(new Long[0]);
-        return arrayOfDepartmentId;
+        return listOfDepartmentId.toArray(new Long[0]);
     }
 
 
     public Long[] getArrayOfNewDepartmentId(int count){
         Long[] arrayId = getArrayOfDepartmentId();
-        Long[] arrayNewId = Arrays.copyOfRange(arrayId, arrayId.length - count, arrayId.length);
-        return arrayNewId;
+        return Arrays.copyOfRange(arrayId, arrayId.length - count, arrayId.length);
     }
 
     private void autoAddingParentalDepartment(Long[] array, Integer[] arrayOfParentalDepartment){
@@ -157,10 +154,13 @@ public class DBNewDepartmentFiller {
                 if (a != 0) {
 
                     long parentalId = array[a - 1];
-                    try (Statement statement = con.createStatement();
+                    try (PreparedStatement preparedStatement = con.prepareStatement("UPDATE application.departments " +
+                            "SET parental_department = ? WHERE id = ?");
                     ) {
-                        statement.executeUpdate("UPDATE application.departments SET parental_department = " + parentalId +
-                                "WHERE id = " + departmentId);
+                        preparedStatement.setLong(1, parentalId);
+                        preparedStatement.setLong(2, departmentId);
+
+                        preparedStatement.executeUpdate();
                     }
                 }
             }

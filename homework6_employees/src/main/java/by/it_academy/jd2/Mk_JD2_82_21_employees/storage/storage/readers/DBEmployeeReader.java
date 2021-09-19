@@ -11,49 +11,22 @@ import java.util.List;
 import java.util.Map;
 
 public class DBEmployeeReader {
-    private static DBEmployeeReader instance = new DBEmployeeReader();
+    private static final DBEmployeeReader instance = new DBEmployeeReader();
 
     private DBEmployeeReader(){
-    }
-
-    public List<Employee> getListOfEmployee(Map<Long, Department> mapOfDepartments,
-                                            Map<Long, Position> mapOfPositions){
-        List<Employee> listOfEmployees = new ArrayList<>();
-        try (Connection con = DBNewInitializer.getConnection();
-             Statement statement = con.createStatement()
-        ){
-            try(ResultSet resultSet = statement.executeQuery("SELECT id, name, salary, department, position " +
-                    "FROM application.employees")){
-
-                while (resultSet.next()){
-                    long id = resultSet.getLong(1);
-                    String name = resultSet.getString(2);
-                    double salary = resultSet.getDouble(3);
-                    long idDepartment = resultSet.getLong(4);
-                    long idPosition = resultSet.getLong(5);
-
-                    Department department = mapOfDepartments.get(idDepartment);
-                    Position position = mapOfPositions.get(idPosition);
-
-                    Employee employee = new Employee(id, name, salary, department, position);
-                    listOfEmployees.add(employee);
-                }
-            }
-        } catch (SQLException ex) {
-            throw new IllegalStateException("Ошибка при работе с базой данных", ex);
-        }
-        return listOfEmployees;
     }
 
     public Employee getEmployee(long id, Map<Long, Department> mapOfDepartments,
                                 Map<Long, Position> mapOfPositions){
         Employee employee = null;
 
-        String sql = "SELECT id, name, salary, department, position FROM application.employees WHERE id = " + id;
         try (Connection con = DBNewInitializer.getConnection();
-             Statement statement = con.createStatement();
+             PreparedStatement preparedStatement = con.prepareStatement("SELECT id, name, salary, department, position " +
+                     "FROM application.employees WHERE id = ? ");
         ){
-            try(ResultSet resultSet = statement.executeQuery(sql)){
+            preparedStatement.setLong(1, id);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
 
                 while (resultSet.next()){
                     String name = resultSet.getString(2);

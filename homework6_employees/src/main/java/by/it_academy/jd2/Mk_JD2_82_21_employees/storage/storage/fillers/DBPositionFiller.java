@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class DBPositionFiller {
-    private static DBPositionFiller instance = new DBPositionFiller();
+    private static final DBPositionFiller instance = new DBPositionFiller();
 
     private static final String DIRECTORY_WITH_FILES_PARAM_NAME = "../conf/file";
     private static final String FILE_WITH_POSITION_PARAM_NAME = "listPosition.xlsx";
