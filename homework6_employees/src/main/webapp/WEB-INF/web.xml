@@ -32,11 +32,11 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>EmployeeParamFilter</filter-name>
-        <servlet-name>AddEmployeeServlet</servlet-name>
+        <servlet-name>EmployeeServlet</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>IDFilter</filter-name>
-        <servlet-name>EmployeeCardServlet</servlet-name>
+        <servlet-name>EmployeeServlet</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>AutoFillFilter</filter-name>
