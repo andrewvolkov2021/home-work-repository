@@ -5,6 +5,7 @@
     </head>
     <body>
         <h1>Карточка сотрудника</h1>
+        <%@ taglib prefix = "fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
         <table border = '1'>
             <capitation>Каротчка сотрудника</capitation>
@@ -18,7 +19,7 @@
             <tr>
                 <td align="center">${employee.getId()}</td>
                 <td align="center">${employee.getName()}</td>
-                <td align="center">${employee.getSalary()}</td>
+                <td align="center"><fmt:formatNumber type="number" value= "${employee.getSalary()}"/></td>
                 <td align="center">${employee.getDepartment().getName()}</td>
                 <td align="center">${employee.getPosition().getName()}</td>
             </tr>

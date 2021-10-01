@@ -6,12 +6,13 @@
     <body>
         <h2>Список сотрудников (фильтр)</h2>
         <h3>Параметры фильтрации</h3>
+        <%@ taglib prefix = "fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
         <p>Имя сотрудников: ${searchEmployee.getName()}</p>
 
-        <p>MIN зарплата: ${searchEmployee.getMinSalary()}</p>
+        <p>MIN зарплата: <fmt:formatNumber type="number" value= "${searchEmployee.getMinSalary()}"/></p>
 
-         <p>MAX зарплата: ${searchEmployee.getMaxSalary()}</p>
+         <p>MAX зарплата: <fmt:formatNumber type="number" value= "${searchEmployee.getMaxSalary()}"/></p>
 
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
