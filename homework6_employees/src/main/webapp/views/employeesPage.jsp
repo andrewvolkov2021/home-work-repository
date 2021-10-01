@@ -62,5 +62,16 @@
 
         <br><br>
         <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/';" value="Назад">
+
+        <hr>
+
+        <h2>Поиск сотрудников</h2>
+        <form action="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/sorting" method="GET">
+            <p>Имя:<input name="searchName" type="text" placeholder="Введите имя сотрудника" size="50"></p>
+            <p>Зарплата: от <input name="minSearchSalary" type="number" min="0" max="99999999.99" step="0.01" placeholder="min" size="50">
+            до <input name="maxSearchSalary" type="number" min="0" max="99999999.99" step="0.01" placeholder="max" size="50">
+            </p>
+            <input type="submit" value="Отсортировать"/>
+        </form>
         </body>
 </html>

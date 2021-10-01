@@ -1,12 +1,25 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model;
 
-import java.math.BigDecimal;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "employees")
 public class Employee {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column
     private String name;
+
+    @Column
     private double salary;
+
+    @ManyToOne
     private Department department;
+
+    @ManyToOne
     private Position position;
 
     public Employee() {
@@ -23,6 +36,22 @@ public class Employee {
         this.name = name;
         this.salary = salary;
         this.department = department;
+        this.position = position;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public void setPosition(Position position) {
         this.position = position;
     }
 

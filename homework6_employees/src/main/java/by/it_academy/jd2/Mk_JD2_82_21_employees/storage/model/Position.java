@@ -1,10 +1,16 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "positions")
 public class Position {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "name_position")
     private String name;
 
     public Position(long id, String name) {
