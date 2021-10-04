@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.model;
 
 import javax.persistence.*;
 
@@ -13,6 +13,9 @@ public class Position {
     @Column(name = "name_position")
     private String name;
 
+    public Position() {
+    }
+
     public Position(long id, String name) {
         this.id = id;
         this.name = name;
@@ -24,5 +27,9 @@ public class Position {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.model;
 
 import javax.persistence.*;
 
@@ -23,12 +23,6 @@ public class Employee {
     private Position position;
 
     public Employee() {
-    }
-
-    public Employee(long id, String name, double salary) {
-        this.id = id;
-        this.name = name;
-        this.salary = salary;
     }
 
     public Employee(long id, String name, double salary, Department department, Position position) {

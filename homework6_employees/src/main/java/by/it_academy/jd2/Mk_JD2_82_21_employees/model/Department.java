@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.model;
 
 import javax.persistence.*;
 
@@ -16,6 +16,9 @@ public class Department {
     @OneToOne
     @JoinColumn(name = "parental_department", referencedColumnName = "id")
     private Department parentalDepartment;
+
+    public Department() {
+    }
 
     public Department(String name) {
         this.name = name;
@@ -37,5 +40,13 @@ public class Department {
 
     public Department getParentalDepartment() {
         return parentalDepartment;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setParentalDepartment(Department parentalDepartment) {
+        this.parentalDepartment = parentalDepartment;
     }
 }

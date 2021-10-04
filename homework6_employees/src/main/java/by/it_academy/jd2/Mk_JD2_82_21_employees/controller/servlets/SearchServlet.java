@@ -1,8 +1,8 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.SelectEmployeeService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Employee;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.SearchEmployee;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.SelectEmployeeServiceOLD;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Employee;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.model.SearchEmployee;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,7 +30,7 @@ public class SearchServlet extends HttpServlet {
         SearchEmployee searchEmployee = new SearchEmployee(searchName, minSearchSalary, maxSearchSalary);
         req.setAttribute("searchEmployee", searchEmployee);
 
-        long page = 0;
+        long page;
         if (req.getParameter(SORTED_NUMBER_PAGE_PARAM_NAME) == null) {
             page = 1;
         } else {
@@ -40,17 +40,17 @@ public class SearchServlet extends HttpServlet {
         long startPosition = (page - 1) * COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE + 1;
         req.setAttribute("startPosition", startPosition);
 
-        List<Employee> fullListOfEmployees = SelectEmployeeService.getInstance()
+        List<Employee> fullListOfEmployees = SelectEmployeeServiceOLD.getInstance()
                 .getFullList(searchEmployee);
-        List<Employee> listOfEmployees = SelectEmployeeService.getInstance()
+        List<Employee> listOfEmployees = SelectEmployeeServiceOLD.getInstance()
                 .getSortedList(page, COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE, fullListOfEmployees);
         req.setAttribute("listOfEmployees", listOfEmployees);
 
-        long countOfPages = SelectEmployeeService.getInstance().
+        long countOfPages = SelectEmployeeServiceOLD.getInstance().
                 getCountOfSortedPages(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE,fullListOfEmployees);
         req.setAttribute("countOfPages", countOfPages);
 
-        long[] pages = SelectEmployeeService.getInstance().getArrayOfPages(page, countOfPages);
+        long[] pages = SelectEmployeeServiceOLD.getInstance().getArrayOfPages(page, countOfPages);
         req.setAttribute("pages", pages);
 
         req.getRequestDispatcher("/views/sortedEmployeePage.jsp").forward(req, resp);

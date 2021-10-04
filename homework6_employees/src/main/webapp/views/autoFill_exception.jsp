@@ -13,7 +13,7 @@
             <p>Зарплата:</p><input name="salary" type="number" " min="0" max="99999999.99" step="0.01" placeholder="Зарплата" size="50">
             <br><br><br>
             <input type="submit" value="Добавить"/>
-            <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employee?getId=${'getId'}';" value="Карточка пользователя">
+            <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employee?getId=${'getId'}';" value="Карточка сотрудника">
         </form>
 
         <hr>

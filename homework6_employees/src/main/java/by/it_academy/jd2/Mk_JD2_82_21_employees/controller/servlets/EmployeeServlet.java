@@ -1,8 +1,8 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.AddEmployeeService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.SelectEmployeeService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Employee;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.NewEmployeeService;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.NewPaginationService;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Employee;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,28 +39,28 @@ public class EmployeeServlet extends HttpServlet {
             long startPosition = (page - 1) * COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE + 1;
             req.setAttribute("startPosition", startPosition);
 
-            List<Employee> listOfEmployees = SelectEmployeeService.getInstance().getSelectListOfEmployee(
+            List<Employee> listOfEmployees =NewEmployeeService.getInstance().getListOfEmployees(
                     COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE, page);
             req.setAttribute("listOfEmployees", listOfEmployees);
 
-            long countOfPages = SelectEmployeeService.getInstance().getCountOfPages(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE);
+            long countOfPages = NewPaginationService.getInstance().getCountOfPages(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE);
             req.setAttribute("countOfPages", countOfPages);
 
-            long[] pages = SelectEmployeeService.getInstance().getArrayOfPages(page, countOfPages);
+            long[] pages = NewPaginationService.getInstance().getArrayOfPages(page, countOfPages);
             req.setAttribute("pages", pages);
 
             req.getRequestDispatcher("/views/employeesPage.jsp").forward(req, resp);
         }
 
-        //Получение карточки сотрудника
+        //Получение карточки сотрудника по ID
         if (req.getParameter(ID_EMPLOYEE_PARAM_NAME) != null) {
             long id = Long.parseLong(req.getParameter(ID_EMPLOYEE_PARAM_NAME));
-            Employee employee = SelectEmployeeService.getInstance().getEmployee(id);
+            Employee employee = NewEmployeeService.getInstance().getEmployee(id);
             req.setAttribute("employee", employee);
             req.getRequestDispatcher("/views/newEmployeeCard.jsp").forward(req, resp);
         }
 
-        //Получение карточки по ID
+        //Перенаправление на сервлет для получения карточки по ID
         if (req.getParameter(EMPLOYEE_CARD_PARAM_NAME) != null) {
             req.getRequestDispatcher("/views/getCard.jsp").forward(req, resp);
         }
@@ -75,7 +75,11 @@ public class EmployeeServlet extends HttpServlet {
         String name = req.getParameter(NAME_EMPLOYEE_PARAM_NAME);
         double salary = Double.parseDouble(req.getParameter(SALARY_PARAM_NAME));
 
-        long id = AddEmployeeService.getInstance().addNewEmployee(name, salary);
+        Employee employee = new Employee();
+        employee.setName(name);
+        employee.setSalary(salary);
+
+        long id = NewEmployeeService.getInstance().addEmployee(employee);
         req.setAttribute("id", id);
         req.getRequestDispatcher("/views/newID.jsp").forward(req, resp);
     }

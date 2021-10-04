@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.model;
 
 public class SearchEmployee {
     private String name;

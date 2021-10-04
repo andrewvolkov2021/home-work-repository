@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.storage.initialiazers;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.initialiazers;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;

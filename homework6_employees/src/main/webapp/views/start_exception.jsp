@@ -16,7 +16,7 @@
             <p style = "color:Red">Внимание!!! Не был указан один из обязательных параметров</p>
 
             <input type="submit" value="Добавить"/>
-            <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employee?getId=${'getId'}';" value="Карточка пользователя">
+            <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employee?getId=${'getId'}';" value="Карточка сотрудника">
         </form>
 
         <hr>

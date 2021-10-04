@@ -1,7 +1,7 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.PositionService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.model.Position;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.NewPositionService;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Position;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,12 +19,12 @@ public class PositionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter(ID_POSITION_PARAM_NAME) == null) {
-            List<Position> listOfPositions = PositionService.getInstance().getListOfPosition();
+            List<Position> listOfPositions = NewPositionService.getInstance().getListOfPositions();
             req.setAttribute("listOfPositions", listOfPositions);
             req.getRequestDispatcher("/views/listOfPositions.jsp").forward(req, resp);
         } else {
             long id = Long.parseLong(req.getParameter(ID_POSITION_PARAM_NAME));
-            Position position = PositionService.getInstance().getPosition(id);
+            Position position = NewPositionService.getInstance().getPosition(id);
             req.setAttribute("position", position);
             req.getRequestDispatcher("/views/positionCard.jsp").forward(req, resp);
         }
