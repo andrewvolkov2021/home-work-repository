@@ -1,17 +1,15 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Employee;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.model.SearchEmployee;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.file_storage.readers.DBEmployeeReader;
 
 import java.util.List;
 
-public class SelectEmployeeServiceOLD {
-    private static SelectEmployeeServiceOLD instance = new SelectEmployeeServiceOLD();
+public class SelectEmployeeService {
 
-    private SelectEmployeeServiceOLD(){
+    private static final SelectEmployeeService instance = new SelectEmployeeService();
+
+    private SelectEmployeeService(){
     }
-
 
     public long[] getArrayOfPages(long page, long maxPage){
         long[] pages = new long[9];
@@ -31,15 +29,6 @@ public class SelectEmployeeServiceOLD {
         return pages;
     }
 
-    public List<Employee> getFullList(SearchEmployee searchEmployee){
-        return DBEmployeeReader.getInstance().getFullSortedListOfEmployees(searchEmployee);
-    }
-
-    public List<Employee> getSortedList(long page, long limit, List<Employee> fullList){
-        long offset = (page - 1) * limit;
-        return DBEmployeeReader.getInstance().getSortedListOfEmployee(offset, limit, fullList);
-    }
-
     public long getCountOfSortedPages(long limit, List<Employee> employees){
         long countOfRecords = employees.size();
         long countOfPages = countOfRecords / limit;
@@ -49,7 +38,7 @@ public class SelectEmployeeServiceOLD {
         return countOfPages;
     }
 
-    public static SelectEmployeeServiceOLD getInstance(){
+    public static SelectEmployeeService getInstance(){
         return instance;
     }
 }

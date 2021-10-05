@@ -36,14 +36,17 @@ public class EmployeeServlet extends HttpServlet {
                 page = Long.parseLong(req.getParameter(NUMBER_PAGE_PARAM_NAME));
             }
 
-            long startPosition = (page - 1) * COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE + 1;
+            long startPosition = NewPaginationService.getInstance()
+                    .getStartPosition(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE, page);
             req.setAttribute("startPosition", startPosition);
 
             List<Employee> listOfEmployees =NewEmployeeService.getInstance().getListOfEmployees(
                     COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE, page);
             req.setAttribute("listOfEmployees", listOfEmployees);
 
-            long countOfPages = NewPaginationService.getInstance().getCountOfPages(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE);
+            long countOFRecords = NewEmployeeService.getInstance().getCountOfRecords();
+            long countOfPages = NewPaginationService.getInstance().getCountOfPages(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE,
+                    countOFRecords);
             req.setAttribute("countOfPages", countOfPages);
 
             long[] pages = NewPaginationService.getInstance().getArrayOfPages(page, countOfPages);

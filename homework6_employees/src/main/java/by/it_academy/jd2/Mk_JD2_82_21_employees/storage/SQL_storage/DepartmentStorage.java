@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQLStorage;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Department;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IDepartmentStorage;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class DepartmentStorage implements IDepartmentStorage {
 
-    private static DepartmentStorage instance = new DepartmentStorage();
+    private static final DepartmentStorage instance = new DepartmentStorage();
 
     private DepartmentStorage(){
     }

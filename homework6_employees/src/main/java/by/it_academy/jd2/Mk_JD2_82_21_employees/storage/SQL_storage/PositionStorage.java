@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQLStorage;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Position;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IPositionStorage;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class PositionStorage implements IPositionStorage {
 
-    private static PositionStorage instance = new PositionStorage();
+    private static final PositionStorage instance = new PositionStorage();
 
     private PositionStorage() {
     }

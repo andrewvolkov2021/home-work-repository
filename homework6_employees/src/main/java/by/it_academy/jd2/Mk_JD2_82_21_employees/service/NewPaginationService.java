@@ -1,18 +1,16 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IPaginationService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQLStorage.EmployeeStorage;
 
 public class NewPaginationService implements IPaginationService {
 
-    private static NewPaginationService instance = new NewPaginationService();
+    private static final NewPaginationService instance = new NewPaginationService();
 
     private NewPaginationService() {
     }
 
     @Override
-    public long getCountOfPages(long count) {
-        long countOfRecords = EmployeeStorage.getInstance().getCountOfRecords();
+    public long getCountOfPages(long count, long countOfRecords) {
         long countOfPages = countOfRecords / count;
         if (countOfRecords % count != 0){
             countOfPages++;
@@ -37,6 +35,11 @@ public class NewPaginationService implements IPaginationService {
             }
         }
         return pages;
+    }
+
+    @Override
+    public long getStartPosition(long size, long page) {
+        return (page - 1) * size + 1;
     }
 
     public static NewPaginationService getInstance(){

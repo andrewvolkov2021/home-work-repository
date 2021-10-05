@@ -2,14 +2,14 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Department;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IDepartmentService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQLStorage.DepartmentStorage;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage.DepartmentStorage;
 
 import java.util.List;
 import java.util.Map;
 
 public class NewDepartmentService implements IDepartmentService {
 
-    private static NewDepartmentService instance = new NewDepartmentService();
+    private static final NewDepartmentService instance = new NewDepartmentService();
 
     private NewDepartmentService() {
     }

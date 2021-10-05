@@ -1,8 +1,9 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.SelectEmployeeServiceOLD;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.model.EmployeeSearchFilter;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.NewEmployeeService;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.NewPaginationService;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Employee;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.model.SearchEmployee;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,33 +25,36 @@ public class SearchServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String searchName = (String) req.getAttribute(SEARCH_EMPLOYEE_NAME_PARAM_NAME);
-        double minSearchSalary = Double.parseDouble((String) req.getAttribute(MIN_SEARCH_SALARY_PARAM_NAME));
-        double maxSearchSalary = Double.parseDouble((String) req.getAttribute(MAX_SEARCH_SALARY_PARAM_NAME));
-        SearchEmployee searchEmployee = new SearchEmployee(searchName, minSearchSalary, maxSearchSalary);
-        req.setAttribute("searchEmployee", searchEmployee);
+        String searchName = req.getParameter(SEARCH_EMPLOYEE_NAME_PARAM_NAME);
+        String minSearchSalary = (String) req.getAttribute(MIN_SEARCH_SALARY_PARAM_NAME);
+        String maxSearchSalary = (String) req.getAttribute(MAX_SEARCH_SALARY_PARAM_NAME);
 
-        long page;
+        String page;
         if (req.getParameter(SORTED_NUMBER_PAGE_PARAM_NAME) == null) {
-            page = 1;
+            page = "1";
         } else {
-            page = Long.parseLong(req.getParameter(SORTED_NUMBER_PAGE_PARAM_NAME));
+            page = req.getParameter(SORTED_NUMBER_PAGE_PARAM_NAME);
         }
+        String size = Long.toString(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE);
 
-        long startPosition = (page - 1) * COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE + 1;
+        EmployeeSearchFilter filter = new EmployeeSearchFilter(page, size, searchName, minSearchSalary, maxSearchSalary);
+        req.setAttribute("searchEmployee", filter);
+
+        List<Employee> sortedList = NewEmployeeService.getInstance().getSortedList(filter);
+        req.setAttribute("listOfEmployees", sortedList);
+
+        List<Employee> fullListWithoutPages =NewEmployeeService.getInstance().getFullSortedList(filter);
+        long countOfRecords = fullListWithoutPages.size();
+
+        long startPosition = NewPaginationService.getInstance()
+                .getStartPosition(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE, Long.parseLong(page));
         req.setAttribute("startPosition", startPosition);
 
-        List<Employee> fullListOfEmployees = SelectEmployeeServiceOLD.getInstance()
-                .getFullList(searchEmployee);
-        List<Employee> listOfEmployees = SelectEmployeeServiceOLD.getInstance()
-                .getSortedList(page, COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE, fullListOfEmployees);
-        req.setAttribute("listOfEmployees", listOfEmployees);
-
-        long countOfPages = SelectEmployeeServiceOLD.getInstance().
-                getCountOfSortedPages(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE,fullListOfEmployees);
+        long countOfPages = NewPaginationService.getInstance().
+                getCountOfPages(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE,countOfRecords);
         req.setAttribute("countOfPages", countOfPages);
 
-        long[] pages = SelectEmployeeServiceOLD.getInstance().getArrayOfPages(page, countOfPages);
+        long[] pages = NewPaginationService.getInstance().getArrayOfPages(Long.parseLong(page), countOfPages);
         req.setAttribute("pages", pages);
 
         req.getRequestDispatcher("/views/sortedEmployeePage.jsp").forward(req, resp);

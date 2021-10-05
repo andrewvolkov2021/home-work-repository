@@ -2,14 +2,14 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Position;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IPositionService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQLStorage.PositionStorage;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage.PositionStorage;
 
 import java.util.List;
 import java.util.Map;
 
 public class NewPositionService implements IPositionService {
 
-    private static NewPositionService instance = new NewPositionService();
+    private static final NewPositionService instance = new NewPositionService();
 
     private NewPositionService() {
     }
