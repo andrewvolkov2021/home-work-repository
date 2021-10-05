@@ -5,7 +5,7 @@ import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Employee;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.EmployeeSearchFilter;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Position;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IEmployeeService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage.EmployeeStorage;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.hibernate_storage.EmployeeStorageHibernate;
 
 import java.util.List;
 import java.util.Map;
@@ -19,14 +19,14 @@ public class NewEmployeeService implements IEmployeeService {
 
     @Override
     public long addEmployee(Employee employee) {
-        return EmployeeStorage.getInstance().addEmployee(employee);
+        return EmployeeStorageHibernate.getInstance().addEmployee(employee);
     }
 
     @Override
     public Employee getEmployee(long id) {
         Map<Long, Department> mapOfDepartments = NewDepartmentService.getInstance().getMapOfDepartments();
         Map<Long, Position> mapOfPositions = NewPositionService.getInstance().getMapOfPositions();
-        return EmployeeStorage.getInstance().getEmployee(id, mapOfDepartments, mapOfPositions);
+        return EmployeeStorageHibernate.getInstance().getEmployee(id, mapOfDepartments, mapOfPositions);
     }
 
     @Override
@@ -35,27 +35,27 @@ public class NewEmployeeService implements IEmployeeService {
         Map<Long, Position> mapOfPositions = NewPositionService.getInstance().getMapOfPositions();
 
         long offset = (page - 1) * limit;
-        return EmployeeStorage.getInstance().getListOfEmployees(limit, offset, mapOfDepartments, mapOfPositions);
+        return EmployeeStorageHibernate.getInstance().getListOfEmployees(limit, offset, mapOfDepartments, mapOfPositions);
     }
 
     @Override
     public void autoAddingOfEmployees(List<Employee> listOfEmployee) {
-        EmployeeStorage.getInstance().autoAddingOfEmployees(listOfEmployee);
+        EmployeeStorageHibernate.getInstance().autoAddingOfEmployees(listOfEmployee);
     }
 
     @Override
     public List<Employee> getSortedList(EmployeeSearchFilter filter) {
-        return EmployeeStorage.getInstance().getSortedList(filter);
+        return EmployeeStorageHibernate.getInstance().getSortedList(filter);
     }
 
     @Override
     public List<Employee> getFullSortedList(EmployeeSearchFilter filter) {
-        return EmployeeStorage.getInstance().getFullSortedList(filter);
+        return EmployeeStorageHibernate.getInstance().getFullSortedList(filter);
     }
 
     @Override
     public long getCountOfRecords() {
-        return EmployeeStorage.getInstance().getCountOfRecords();
+        return EmployeeStorageHibernate.getInstance().getCountOfRecords();
     }
 
     public static NewEmployeeService getInstance(){
