@@ -1,8 +1,9 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.NewEmployeeService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.NewPaginationService;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Employee;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IEmployeeService;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IPaginationService;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.utils.ApplicationContextUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +24,14 @@ public class EmployeeServlet extends HttpServlet {
     private static final String SALARY_PARAM_NAME = "salary";
     private static final String EMPLOYEE_CARD_PARAM_NAME = "getId";
 
+    private final IEmployeeService employeeService;
+    private final IPaginationService paginationService;
+
+    public EmployeeServlet(){
+        this.employeeService = ApplicationContextUtil.getContext().getBean(IEmployeeService.class);
+        this.paginationService = ApplicationContextUtil.getContext().getBean(IPaginationService.class);
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -36,20 +45,20 @@ public class EmployeeServlet extends HttpServlet {
                 page = Long.parseLong(req.getParameter(NUMBER_PAGE_PARAM_NAME));
             }
 
-            long startPosition = NewPaginationService.getInstance()
+            long startPosition = paginationService
                     .getStartPosition(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE, page);
             req.setAttribute("startPosition", startPosition);
 
-            List<Employee> listOfEmployees =NewEmployeeService.getInstance().getListOfEmployees(
+            List<Employee> listOfEmployees = employeeService.getListOfEmployees(
                     COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE, page);
             req.setAttribute("listOfEmployees", listOfEmployees);
 
-            long countOFRecords = NewEmployeeService.getInstance().getCountOfRecords();
-            long countOfPages = NewPaginationService.getInstance().getCountOfPages(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE,
+            long countOFRecords = employeeService.getCountOfRecords();
+            long countOfPages = paginationService.getCountOfPages(COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE,
                     countOFRecords);
             req.setAttribute("countOfPages", countOfPages);
 
-            long[] pages = NewPaginationService.getInstance().getArrayOfPages(page, countOfPages);
+            long[] pages = paginationService.getArrayOfPages(page, countOfPages);
             req.setAttribute("pages", pages);
 
             req.getRequestDispatcher("/views/employeesPage.jsp").forward(req, resp);
@@ -58,7 +67,7 @@ public class EmployeeServlet extends HttpServlet {
         //Получение карточки сотрудника по ID
         if (req.getParameter(ID_EMPLOYEE_PARAM_NAME) != null) {
             long id = Long.parseLong(req.getParameter(ID_EMPLOYEE_PARAM_NAME));
-            Employee employee = NewEmployeeService.getInstance().getEmployee(id);
+            Employee employee = employeeService.getEmployee(id);
             req.setAttribute("employee", employee);
             req.getRequestDispatcher("/views/newEmployeeCard.jsp").forward(req, resp);
         }
@@ -82,7 +91,7 @@ public class EmployeeServlet extends HttpServlet {
         employee.setName(name);
         employee.setSalary(salary);
 
-        long id = NewEmployeeService.getInstance().addEmployee(employee);
+        long id = employeeService.addEmployee(employee);
         req.setAttribute("id", id);
         req.getRequestDispatcher("/views/newID.jsp").forward(req, resp);
     }

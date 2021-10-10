@@ -14,9 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 public class DepartmentStorageHibernate implements IDepartmentStorage {
-     private static final DepartmentStorageHibernate instance = new DepartmentStorageHibernate();
 
-    private DepartmentStorageHibernate() {
+    private final SessionFactory sessionFactory;
+
+    public DepartmentStorageHibernate(SessionFactory sessionFactory){
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -108,9 +110,5 @@ public class DepartmentStorageHibernate implements IDepartmentStorage {
         }
         sessionOne.getTransaction().commit();
         sessionOne.close();
-    }
-
-    public static DepartmentStorageHibernate getInstance(){
-        return instance;
     }
 }

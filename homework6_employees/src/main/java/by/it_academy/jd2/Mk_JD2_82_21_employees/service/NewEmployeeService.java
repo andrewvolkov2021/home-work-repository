@@ -4,61 +4,65 @@ import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Department;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Employee;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.EmployeeSearchFilter;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Position;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IDepartmentService;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IEmployeeService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.hibernate_storage.EmployeeStorageHibernate;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IPositionService;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IEmployeeStorage;
 
 import java.util.List;
 import java.util.Map;
 
 public class NewEmployeeService implements IEmployeeService {
 
-    private static final NewEmployeeService instance = new NewEmployeeService();
+    private final IEmployeeStorage employeeStorage;
+    private final IDepartmentService departmentService;
+    private final IPositionService positionService;
 
-    private NewEmployeeService() {
+    public NewEmployeeService(IEmployeeStorage employeeStorage, IDepartmentService departmentService,
+                              IPositionService positionService){
+        this.employeeStorage = employeeStorage;
+        this.departmentService = departmentService;
+        this.positionService = positionService;
     }
-
+    
     @Override
     public long addEmployee(Employee employee) {
-        return EmployeeStorageHibernate.getInstance().addEmployee(employee);
+        return employeeStorage.addEmployee(employee);
     }
 
     @Override
     public Employee getEmployee(long id) {
-        Map<Long, Department> mapOfDepartments = NewDepartmentService.getInstance().getMapOfDepartments();
-        Map<Long, Position> mapOfPositions = NewPositionService.getInstance().getMapOfPositions();
-        return EmployeeStorageHibernate.getInstance().getEmployee(id, mapOfDepartments, mapOfPositions);
+        Map<Long, Department> mapOfDepartments =departmentService.getMapOfDepartments();
+        Map<Long, Position> mapOfPositions = positionService.getMapOfPositions();
+        return employeeStorage.getEmployee(id, mapOfDepartments, mapOfPositions);
     }
 
     @Override
     public List<Employee> getListOfEmployees(long limit, long page) {
-        Map<Long, Department> mapOfDepartments = NewDepartmentService.getInstance().getMapOfDepartments();
-        Map<Long, Position> mapOfPositions = NewPositionService.getInstance().getMapOfPositions();
+        Map<Long, Department> mapOfDepartments = departmentService.getMapOfDepartments();
+        Map<Long, Position> mapOfPositions = positionService.getMapOfPositions();
 
         long offset = (page - 1) * limit;
-        return EmployeeStorageHibernate.getInstance().getListOfEmployees(limit, offset, mapOfDepartments, mapOfPositions);
+        return employeeStorage.getListOfEmployees(limit, offset, mapOfDepartments, mapOfPositions);
     }
 
     @Override
     public void autoAddingOfEmployees(List<Employee> listOfEmployee) {
-        EmployeeStorageHibernate.getInstance().autoAddingOfEmployees(listOfEmployee);
+        employeeStorage.autoAddingOfEmployees(listOfEmployee);
     }
 
     @Override
     public List<Employee> getSortedList(EmployeeSearchFilter filter) {
-        return EmployeeStorageHibernate.getInstance().getSortedList(filter);
+        return employeeStorage.getSortedList(filter);
     }
 
     @Override
     public List<Employee> getFullSortedList(EmployeeSearchFilter filter) {
-        return EmployeeStorageHibernate.getInstance().getFullSortedList(filter);
+        return employeeStorage.getFullSortedList(filter);
     }
 
     @Override
     public long getCountOfRecords() {
-        return EmployeeStorageHibernate.getInstance().getCountOfRecords();
-    }
-
-    public static NewEmployeeService getInstance(){
-        return instance;
+        return employeeStorage.getCountOfRecords();
     }
 }

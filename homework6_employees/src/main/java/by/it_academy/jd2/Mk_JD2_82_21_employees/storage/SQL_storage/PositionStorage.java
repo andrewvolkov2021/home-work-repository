@@ -12,11 +12,6 @@ import java.util.Map;
 
 public class PositionStorage implements IPositionStorage {
 
-    private static final PositionStorage instance = new PositionStorage();
-
-    private PositionStorage() {
-    }
-
     @Override
     public Position getPosition(long id) {
         Position position = null;
@@ -100,9 +95,5 @@ public class PositionStorage implements IPositionStorage {
         }  catch (SQLException ex) {
             throw new IllegalStateException("Ошибка при работе с базой данных", ex);
         }
-    }
-
-    public static PositionStorage getInstance(){
-        return instance;
     }
 }

@@ -15,9 +15,10 @@ import java.util.Map;
 
 public class PositionStorageHibernate implements IPositionStorage {
 
-    private static final PositionStorageHibernate instance = new PositionStorageHibernate();
+    private final SessionFactory sessionFactory;
 
-    private PositionStorageHibernate() {
+    public PositionStorageHibernate(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -65,9 +66,5 @@ public class PositionStorageHibernate implements IPositionStorage {
         listOfPosition.forEach(x -> session.save(x));
         session.getTransaction().commit();
         session.close();
-    }
-
-    public static PositionStorageHibernate getInstance(){
-        return instance;
     }
 }

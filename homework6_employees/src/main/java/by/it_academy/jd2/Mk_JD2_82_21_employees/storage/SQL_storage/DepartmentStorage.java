@@ -12,11 +12,6 @@ import java.util.Map;
 
 public class DepartmentStorage implements IDepartmentStorage {
 
-    private static final DepartmentStorage instance = new DepartmentStorage();
-
-    private DepartmentStorage(){
-    }
-
     @Override
     public Department getDepartment(long id) {
         Department department = null;
@@ -153,9 +148,5 @@ public class DepartmentStorage implements IDepartmentStorage {
         }  catch (SQLException ex) {
             throw new IllegalStateException("Ошибка при работе с базой данных", ex);
         }
-    }
-
-    public static DepartmentStorage getInstance(){
-        return instance;
     }
 }

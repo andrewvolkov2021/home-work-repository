@@ -2,49 +2,46 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Department;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IDepartmentService;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.hibernate_storage.DepartmentStorageHibernate;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IDepartmentStorage;
 
 import java.util.List;
 import java.util.Map;
 
 public class NewDepartmentService implements IDepartmentService {
 
-    private static final NewDepartmentService instance = new NewDepartmentService();
+    private final IDepartmentStorage departmentStorage;
 
-    private NewDepartmentService() {
+    public NewDepartmentService(IDepartmentStorage departmentStorage){
+        this.departmentStorage = departmentStorage;
     }
 
     @Override
     public Map<Long, Department> getMapOfDepartments() {
-        return DepartmentStorageHibernate.getInstance().getMapOfDepartments();
+        return departmentStorage.getMapOfDepartments();
     }
 
     @Override
     public List<Department> getListOfDepartments() {
-        return DepartmentStorageHibernate.getInstance().getListOfDepartments();
+        return departmentStorage.getListOfDepartments();
     }
 
     @Override
     public Department getDepartment(long id) {
-        return DepartmentStorageHibernate.getInstance().getDepartment(id);
+        return departmentStorage.getDepartment(id);
     }
 
     @Override
     public void autoAddingDepartment(List<Department> listOfDepartment) {
-        DepartmentStorageHibernate.getInstance().autoAddingDepartments(listOfDepartment);
+        departmentStorage.autoAddingDepartments(listOfDepartment);
     }
 
     @Override
     public List<Long> getListOfDepartmentId() {
-        return DepartmentStorageHibernate.getInstance().getListOfDepartmentId();
+        return departmentStorage.getListOfDepartmentId();
     }
 
     @Override
     public void autoAddingParentalDepartment(Long[] array, Integer[] arrayOfParentalDepartment) {
-        DepartmentStorageHibernate.getInstance().autoAddingParentalDepartment(array, arrayOfParentalDepartment);
-    }
-
-    public static NewDepartmentService getInstance(){
-        return instance;
+        departmentStorage.autoAddingParentalDepartment(array, arrayOfParentalDepartment);
     }
 }

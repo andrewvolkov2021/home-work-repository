@@ -4,11 +4,6 @@ import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IPaginationService;
 
 public class NewPaginationService implements IPaginationService {
 
-    private static final NewPaginationService instance = new NewPaginationService();
-
-    private NewPaginationService() {
-    }
-
     @Override
     public long getCountOfPages(long count, long countOfRecords) {
         long countOfPages = countOfRecords / count;
@@ -40,9 +35,5 @@ public class NewPaginationService implements IPaginationService {
     @Override
     public long getStartPosition(long size, long page) {
         return (page - 1) * size + 1;
-    }
-
-    public static NewPaginationService getInstance(){
-        return instance;
     }
 }

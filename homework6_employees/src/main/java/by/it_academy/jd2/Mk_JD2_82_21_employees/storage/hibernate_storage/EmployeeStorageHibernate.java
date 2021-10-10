@@ -17,9 +17,10 @@ import java.util.Map;
 
 public class EmployeeStorageHibernate implements IEmployeeStorage {
 
-    private static final EmployeeStorageHibernate instance = new EmployeeStorageHibernate();
+    private final SessionFactory sessionFactory;
 
-    private EmployeeStorageHibernate() {
+    public EmployeeStorageHibernate(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -164,9 +165,5 @@ public class EmployeeStorageHibernate implements IEmployeeStorage {
 
         Expression<Boolean> restriction = criteriaBuilder.and(predicatesArray);
         return criteriaQuery.where(restriction);
-    }
-
-    public static EmployeeStorageHibernate getInstance(){
-        return instance;
     }
 }

@@ -15,11 +15,6 @@ import java.util.Map;
 
 public class EmployeeStorage implements IEmployeeStorage {
 
-    private static final EmployeeStorage instance = new EmployeeStorage();
-
-    private EmployeeStorage() {
-    }
-
     @Override
     public long addEmployee(Employee employee) {
         long id;
@@ -224,9 +219,5 @@ public class EmployeeStorage implements IEmployeeStorage {
 
         Expression<Boolean> restriction = criteriaBuilder.and(predicatesArray);
         return criteriaQuery.where(restriction);
-    }
-
-    public static EmployeeStorage getInstance(){
-        return instance;
     }
 }

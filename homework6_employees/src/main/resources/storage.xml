@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="departmentStorageHibernate" class="by.it_academy.jd2.Mk_JD2_82_21_employees.storage.hibernate_storage.DepartmentStorageHibernate">
+        <constructor-arg ref="sessionFactory"/>
+    </bean>
+    <bean id="employeeStorageHibernate" class="by.it_academy.jd2.Mk_JD2_82_21_employees.storage.hibernate_storage.EmployeeStorageHibernate">
+        <constructor-arg ref="sessionFactory"/>
+    </bean>
+    <bean id="positionStorageHibernate" class="by.it_academy.jd2.Mk_JD2_82_21_employees.storage.hibernate_storage.PositionStorageHibernate">
+        <constructor-arg ref="sessionFactory"/>
+    </bean>
+
+    <bean id = "departmentStorage" class = "by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage.DepartmentStorage"/>
+    <bean id = "employeeStorage" class = "by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage.EmployeeStorage"/>
+    <bean id = "positionStorage" class = "by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage.PositionStorage"/>
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" destroy-method="destroy">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="by.it_academy.jd2.Mk_JD2_82_21_employees.model"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.default_schema">application</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL10Dialect</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="org.postgresql.Driver" />
+        <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/employees" />
+        <property name="user" value="postgres" />
+        <property name="password" value="mir2020mir" />
+        <!-- these are connection pool properties for C3P0 -->
+        <property name="minPoolSize" value="5" />
+        <property name="maxPoolSize" value="20" />
+        <property name="maxIdleTime" value="30000" />
+    </bean>
+</beans>

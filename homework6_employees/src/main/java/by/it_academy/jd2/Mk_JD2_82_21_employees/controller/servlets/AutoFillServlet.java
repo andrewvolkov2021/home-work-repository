@@ -1,6 +1,7 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
 
-import by.it_academy.jd2.Mk_JD2_82_21_employees.service.NewAutoFillerService;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IAutoFillerService;
+import by.it_academy.jd2.Mk_JD2_82_21_employees.utils.ApplicationContextUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,10 +15,16 @@ public class AutoFillServlet extends HttpServlet {
 
     private static final String EMPLOYEE_COUNT_PARAM_MANE = "count";
 
+    private final IAutoFillerService autoFillerService;
+
+    public AutoFillServlet() {
+        this.autoFillerService = ApplicationContextUtil.getContext().getBean(IAutoFillerService.class);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int count = Integer.parseInt(req.getParameter(EMPLOYEE_COUNT_PARAM_MANE));
-        NewAutoFillerService.getInstance().fillDateBase(count);
+        autoFillerService.fillDateBase(count);
 
         req.getRequestDispatcher("/views/start.jsp").forward(req, resp);
     }
