@@ -14,6 +14,8 @@
 
          <p>MAX зарплата: <fmt:formatNumber type="number" value= "${searchEmployee.getMaxSalary()}"/></p>
 
+         <hr>
+
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
         <ol start = "${startPosition}">

@@ -2,7 +2,7 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Department;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IDepartmentStorage;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.initialiazers.DBNewInitializer;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,11 +12,17 @@ import java.util.Map;
 
 public class DepartmentStorage implements IDepartmentStorage {
 
+    private final ComboPooledDataSource connection;
+
+    public DepartmentStorage(ComboPooledDataSource connection){
+        this.connection = connection;
+    }
+
     @Override
     public Department getDepartment(long id) {
         Department department = null;
 
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement("SELECT id, name_department, parental_department" +
                      " FROM application.departments WHERE id = ? ");
         ){
@@ -41,7 +47,7 @@ public class DepartmentStorage implements IDepartmentStorage {
     @Override
     public Map<Long, Department> getMapOfDepartments() {
         Map<Long, Department> mapOfDepartments = new HashMap<>();
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              Statement statement = con.createStatement()
         ){
             try(ResultSet resultSet = statement.executeQuery("SELECT id, name_department, parental_department " +
@@ -67,7 +73,7 @@ public class DepartmentStorage implements IDepartmentStorage {
     @Override
     public List<Department> getListOfDepartments() {
         List<Department> listOfDepartments = new ArrayList<>();
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              Statement statement = con.createStatement()
         ){
             try(ResultSet resultSet = statement.executeQuery("SELECT id, name_department, parental_department " +
@@ -92,7 +98,7 @@ public class DepartmentStorage implements IDepartmentStorage {
 
     @Override
     public void autoAddingDepartments(List<Department> listOfDepartments) {
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO application.departments(\n" +
                      "name_department)\n" + "VALUES (?);")
         ){
@@ -111,7 +117,7 @@ public class DepartmentStorage implements IDepartmentStorage {
     @Override
     public List<Long> getListOfDepartmentId() {
         List<Long> listOfDepartmentId = new ArrayList<>();
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              Statement statement = con.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT id FROM application.departments")
         ){
@@ -127,7 +133,7 @@ public class DepartmentStorage implements IDepartmentStorage {
 
     @Override
     public void autoAddingParentalDepartment(Long[] array, Integer[] arrayOfParentalDepartment) {
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
         ){
             for (int i = 0; i < array.length; i++) {
                 long departmentId = array[i];

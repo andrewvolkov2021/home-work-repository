@@ -2,7 +2,7 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Position;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IPositionStorage;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.initialiazers.DBNewInitializer;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,11 +12,17 @@ import java.util.Map;
 
 public class PositionStorage implements IPositionStorage {
 
+    private final ComboPooledDataSource connection;
+
+    public PositionStorage(ComboPooledDataSource connection){
+        this.connection = connection;
+    }
+
     @Override
     public Position getPosition(long id) {
         Position position = null;
 
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement("SELECT id, name_position " +
                      "FROM application.positions WHERE id = ?");
         ){
@@ -38,7 +44,7 @@ public class PositionStorage implements IPositionStorage {
     @Override
     public Map<Long, Position> getMapOfPositions() {
         Map<Long, Position> mapOfPositions = new HashMap<>();
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              Statement statement = con.createStatement()
         ){
             try(ResultSet resultSet = statement.executeQuery("SELECT id, name_position " +
@@ -61,7 +67,7 @@ public class PositionStorage implements IPositionStorage {
     @Override
     public List<Position> getListOfPositions() {
         List<Position> listOfPositions = new ArrayList<>();
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              Statement statement = con.createStatement()
         ){
             try(ResultSet resultSet = statement.executeQuery("SELECT id, name_position " +
@@ -83,7 +89,7 @@ public class PositionStorage implements IPositionStorage {
 
     @Override
     public void autoAddingPositions(List<Position> listOfPosition) {
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO application.positions(\n" +
                      "name_position)\n" + "VALUES (?);")
         ){

@@ -5,7 +5,6 @@ import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Employee;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.EmployeeSearchFilter;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Position;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IEmployeeStorage;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.initialiazers.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -25,7 +24,6 @@ public class EmployeeStorageHibernate implements IEmployeeStorage {
 
     @Override
     public long addEmployee(Employee employee) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(employee);
@@ -36,9 +34,9 @@ public class EmployeeStorageHibernate implements IEmployeeStorage {
 
     @Override
     public Employee getEmployee(long id, Map<Long, Department> mapOfDepartment, Map<Long, Position> mapOfPosition) {
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
         CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
         Root<Employee> itemRoot = criteriaQuery.from(Employee.class);
         criteriaQuery.select(itemRoot);
@@ -50,10 +48,10 @@ public class EmployeeStorageHibernate implements IEmployeeStorage {
     }
 
     @Override
-    public List<Employee> getListOfEmployees(long limit, long offset, Map<Long, Department> mapOfDepartments, Map<Long, Position> mapOfPositions) {
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+    public List<Employee> getListOfEmployees(long limit, long offset, Map<Long, Department> mapOfDepartments, Map<Long, Position> mapOfPositions){
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
         CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
         Root<Employee> itemRoot = criteriaQuery.from(Employee.class);
         criteriaQuery.select(itemRoot);
@@ -71,9 +69,9 @@ public class EmployeeStorageHibernate implements IEmployeeStorage {
 
     @Override
     public long getCountOfRecords() {
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<Employee> itemRoot = criteriaQuery.from(Employee.class);
         criteriaQuery.select(criteriaBuilder.count(itemRoot));
@@ -86,7 +84,6 @@ public class EmployeeStorageHibernate implements IEmployeeStorage {
 
     @Override
     public void autoAddingOfEmployees(List<Employee> listOfEmployee) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         listOfEmployee.forEach(x -> session.save(x));
@@ -96,10 +93,9 @@ public class EmployeeStorageHibernate implements IEmployeeStorage {
 
     @Override
     public List<Employee> getSortedList(EmployeeSearchFilter filter) {
-
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
 
         CriteriaQuery<Employee> criteriaQuery = getCriteriaQuery(filter, criteriaBuilder);
 
@@ -120,9 +116,9 @@ public class EmployeeStorageHibernate implements IEmployeeStorage {
 
     @Override
     public List<Employee> getFullSortedList(EmployeeSearchFilter filter) {
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
 
         CriteriaQuery<Employee> criteriaQuery = getCriteriaQuery(filter, criteriaBuilder);
 

@@ -2,9 +2,10 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.*;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IEmployeeStorage;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.initialiazers.DBNewInitializer;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.initialiazers.HibernateUtil;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
 import javax.persistence.criteria.*;
@@ -15,13 +16,21 @@ import java.util.Map;
 
 public class EmployeeStorage implements IEmployeeStorage {
 
+    private final ComboPooledDataSource connection;
+    private final SessionFactory sessionFactory;
+
+    public EmployeeStorage(ComboPooledDataSource connection, SessionFactory sessionFactory){
+        this.connection = connection;
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public long addEmployee(Employee employee) {
         long id;
         String name = employee.getName();
         double salary = employee.getSalary();
 
-        try (Connection con = DBNewInitializer.getConnection()
+        try (Connection con = connection.getConnection()
         ) {
 
             try (PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO application.employees(\n" +
@@ -51,7 +60,7 @@ public class EmployeeStorage implements IEmployeeStorage {
     public Employee getEmployee(long id, Map<Long, Department> mapOfDepartments,Map<Long, Position> mapOfPositions) {
         Employee employee = null;
 
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              PreparedStatement preparedStatement = con.prepareStatement("SELECT id, name, salary, department, position " +
                      "FROM application.employees WHERE id = ? ");
         ){
@@ -81,7 +90,7 @@ public class EmployeeStorage implements IEmployeeStorage {
     public List<Employee> getListOfEmployees(long limit, long offset, Map<Long, Department> mapOfDepartments,
                                              Map<Long, Position> mapOfPositions) {
         List<Employee> listOfEmployees = new ArrayList<>();
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT id, name, salary, department, position " +
                      "FROM application.employees ORDER BY id ASC LIMIT ? OFFSET ?")
         ){
@@ -113,7 +122,7 @@ public class EmployeeStorage implements IEmployeeStorage {
     @Override
     public long getCountOfRecords() {
         long count = 0;
-        try (Connection con = DBNewInitializer.getConnection();
+        try (Connection con = connection.getConnection();
              Statement statement = con.createStatement()
         ) {
             try (ResultSet resultSet = statement.executeQuery("SELECT count(id) FROM application.employees")) {
@@ -130,7 +139,7 @@ public class EmployeeStorage implements IEmployeeStorage {
     @Override
     public void autoAddingOfEmployees(List<Employee> listOfEmployee) {
         listOfEmployee.forEach(x -> {
-            try (Connection con = DBNewInitializer.getConnection();
+            try (Connection con = connection.getConnection();
                  PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO application.employees(\n" +
                          "name, salary, department, position)\n" + "VALUES (?, ?, ?, ?);")
             ){
@@ -150,7 +159,7 @@ public class EmployeeStorage implements IEmployeeStorage {
 
     @Override
     public List<Employee> getFullSortedList(EmployeeSearchFilter filter){
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
         CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
 
@@ -165,7 +174,7 @@ public class EmployeeStorage implements IEmployeeStorage {
     @Override
     public List<Employee> getSortedList(EmployeeSearchFilter filter) {
 
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
         CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
 

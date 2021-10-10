@@ -2,7 +2,6 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.hibernate_storage;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Position;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IPositionStorage;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.initialiazers.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -31,9 +30,9 @@ public class PositionStorageHibernate implements IPositionStorage {
 
     @Override
     public Position getPosition(long id) {
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
         CriteriaQuery<Position> criteriaQuery = criteriaBuilder.createQuery(Position.class);
         Root<Position> itemRoot = criteriaQuery.from(Position.class);
         criteriaQuery.select(itemRoot);
@@ -46,9 +45,9 @@ public class PositionStorageHibernate implements IPositionStorage {
 
     @Override
     public List<Position> getListOfPositions() {
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
         CriteriaQuery<Position> criteriaQuery = criteriaBuilder.createQuery(Position.class);
         Root<Position> itemRoot = criteriaQuery.from(Position.class);
         criteriaQuery.select(itemRoot);
@@ -60,7 +59,6 @@ public class PositionStorageHibernate implements IPositionStorage {
 
     @Override
     public void autoAddingPositions(List<Position> listOfPosition) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         listOfPosition.forEach(x -> session.save(x));

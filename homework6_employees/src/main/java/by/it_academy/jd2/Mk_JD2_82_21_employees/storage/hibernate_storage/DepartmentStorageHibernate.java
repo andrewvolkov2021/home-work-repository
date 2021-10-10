@@ -2,7 +2,6 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.hibernate_storage;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Department;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IDepartmentStorage;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.initialiazers.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -31,9 +30,9 @@ public class DepartmentStorageHibernate implements IDepartmentStorage {
 
     @Override
     public Department getDepartment(long id) {
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+               Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
         CriteriaQuery<Department> criteriaQuery = criteriaBuilder.createQuery(Department.class);
         Root<Department> itemRoot = criteriaQuery.from(Department.class);
         criteriaQuery.select(itemRoot);
@@ -46,9 +45,9 @@ public class DepartmentStorageHibernate implements IDepartmentStorage {
 
     @Override
     public List<Department> getListOfDepartments() {
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
         CriteriaQuery<Department> criteriaQuery = criteriaBuilder.createQuery(Department.class);
         Root<Department> itemRoot = criteriaQuery.from(Department.class);
         criteriaQuery.select(itemRoot);
@@ -60,7 +59,6 @@ public class DepartmentStorageHibernate implements IDepartmentStorage {
 
     @Override
     public void autoAddingDepartments(List<Department> listOfDepartments) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         listOfDepartments.forEach(x -> session.save(x));
@@ -70,9 +68,9 @@ public class DepartmentStorageHibernate implements IDepartmentStorage {
 
     @Override
     public List<Long> getListOfDepartmentId() {
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<Department> itemRoot = criteriaQuery.from(Department.class);
         criteriaQuery.select(itemRoot.get("id"));
@@ -84,9 +82,9 @@ public class DepartmentStorageHibernate implements IDepartmentStorage {
 
     @Override
     public void autoAddingParentalDepartment(Long[] array, Integer[] arrayOfParentalDepartment) {
-        Session sessionOne = HibernateUtil.getSessionFactory().openSession();
+        Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
 
         for (int i = 0; i < array.length; i++) {
             long departmentId = array[i];
