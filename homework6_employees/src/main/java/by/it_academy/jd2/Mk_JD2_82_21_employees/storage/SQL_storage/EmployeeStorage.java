@@ -2,7 +2,6 @@ package by.it_academy.jd2.Mk_JD2_82_21_employees.storage.SQL_storage;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.*;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.api.IEmployeeStorage;
-import by.it_academy.jd2.Mk_JD2_82_21_employees.storage.initialiazers.HibernateUtil;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -161,7 +160,7 @@ public class EmployeeStorage implements IEmployeeStorage {
     public List<Employee> getFullSortedList(EmployeeSearchFilter filter){
         Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
 
         CriteriaQuery<Employee> criteriaQuery = getCriteriaQuery(filter, criteriaBuilder);
 
@@ -176,7 +175,7 @@ public class EmployeeStorage implements IEmployeeStorage {
 
         Session sessionOne = sessionFactory.openSession();
         sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = HibernateUtil.getSessionFactory().createEntityManager().getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
 
         CriteriaQuery<Employee> criteriaQuery = getCriteriaQuery(filter, criteriaBuilder);
 
