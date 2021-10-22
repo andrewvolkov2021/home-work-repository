@@ -9,7 +9,7 @@
 
         <ol>
         <c:forEach items="${listOfDepartments}" var="item" >
-        <li><a href="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/department?id=${item.getId()}">${item.getName()}<a/></li>
+        <li><a href="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/department/${item.getId()}">${item.getName()}<a/></li>
         </c:forEach>
         </ol>
 

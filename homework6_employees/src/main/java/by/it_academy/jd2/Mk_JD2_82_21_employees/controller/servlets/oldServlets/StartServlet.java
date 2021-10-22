@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets.oldServlets;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "StartServlet", urlPatterns = "/")
+@WebServlet(name = "StartServlet", urlPatterns = "/OLD")
 public class StartServlet extends HttpServlet {
 
     @Override

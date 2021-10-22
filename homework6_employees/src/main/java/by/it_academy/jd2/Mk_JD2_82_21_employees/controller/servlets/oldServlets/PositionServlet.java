@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets.oldServlets;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Position;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IPositionService;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "PositionServlet", urlPatterns = "/position")
+@WebServlet(name = "PositionServlet", urlPatterns = "/positionOLD")
 public class PositionServlet extends HttpServlet {
 
     private static final String ID_POSITION_PARAM_NAME = "id";

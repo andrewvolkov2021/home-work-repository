@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets.oldServlets;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.EmployeeSearchFilter;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Employee;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "SearchServlet", urlPatterns = "/sorting")
+@WebServlet(name = "SearchServlet", urlPatterns = "/sortingOLD")
 public class SearchServlet extends HttpServlet {
 
     private static final long COUNT_OF_EMPLOYEES_ON_PAGE_PARAM_MANE = 20;

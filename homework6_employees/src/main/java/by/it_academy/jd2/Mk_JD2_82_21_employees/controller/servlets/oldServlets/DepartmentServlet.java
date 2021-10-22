@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets.oldServlets;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Department;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IDepartmentService;
@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "DepartmentServlet", urlPatterns = "/department")
+
+@WebServlet(name = "DepartmentServlet", urlPatterns = "/departmentOLD")
 public class DepartmentServlet extends HttpServlet {
 
     private static final String ID_DEPARTMENT_PARAM_NAME = "id";

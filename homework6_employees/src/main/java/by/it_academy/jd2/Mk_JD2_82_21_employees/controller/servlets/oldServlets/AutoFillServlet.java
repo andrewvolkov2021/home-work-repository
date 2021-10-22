@@ -1,4 +1,4 @@
-package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets;
+package by.it_academy.jd2.Mk_JD2_82_21_employees.controller.servlets.oldServlets;
 
 import by.it_academy.jd2.Mk_JD2_82_21_employees.service.api.IAutoFillerService;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.utils.ApplicationContextUtil;
