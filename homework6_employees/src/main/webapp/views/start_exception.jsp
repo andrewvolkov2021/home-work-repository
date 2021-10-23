@@ -5,19 +5,63 @@
     </head>
     <body>
 
-        <h1>База данных Employees</h1>
-        <h2>Добавление сотрудника в базу данных</h2>
-        <form action="/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employee?paramNewEmployee=${'newEmployee'}" method="POST">
-            <p>Для добавления сотрудника в базу данных необходимо указать обязательные параметры: имя и зарплату</p>
-            <p>Имя:</p><input name="name" type="text" placeholder="Введите имя сотрудника" size="50">
-            <p>Зарплата:</p><input name="salary" type="number" " min="0" max="99999999.99" step="0.01" placeholder="Зарплата" size="50">
+         <h1>База данных Employees</h1>
+         <h2>Добавление сотрудника в базу данных</h2>
+         <form id="2" action="api/employee" method="POST">
+             <p>Для добавления сотрудника в базу данных необходимо указать обязательные параметры: имя и зарплату</p>
+             <p>Имя :</p><input name="name" type="text" placeholder="Введите имя сотрудника" size="50">
+             <p>Зарплата:</p><input name="salary" type="number"  min="0" max="99999999.99" step="0.01" placeholder="Зарплата" size="50">
+             <br><br><br>
+             <input type="submit" value="Добавить"/>
+             <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employee/getId';" value="Карточка сотрудника">
+         </form>
 
-            <br>
-            <p style = "color:Red">Внимание!!! Не был указан один из обязательных параметров</p>
-
-            <input type="submit" value="Добавить"/>
-            <input type="button" onclick="location.href='/Mk-JD2-82-21-employees-1.0-SNAPSHOT/employee?getId=${'getId'}';" value="Карточка сотрудника">
-        </form>
+         <script type="text/javascript">
+ 			document.getElementById('2').addEventListener('submit', submitForm);
+ 			function submitForm(event) {
+ 			    // Отменяем стандартное поведение браузера с отправкой формы
+ 			    event.preventDefault();
+ 			    // event.target — это HTML-элемент form
+ 			    let formData = new FormData(event.target);
+ 			    // Собираем данные формы в объект
+ 			    let obj = {};
+ 			    formData.forEach(
+ 			    	(value, key) => {
+ 						if(key.includes('.')){
+ 							var partName = key.split(".");
+ 			    			obj[partName[0]] = {};
+ 			    			obj[partName[0]][partName[1]] = value;
+ 			    		} else {
+ 							obj[key] = value;
+ 			    		}
+ 			    	}
+ 			    );
+ 			    // Собираем запрос к серверу
+ 			    let request = new Request(event.target.action, {
+ 			        method: 'POST',
+ 			        body: JSON.stringify(obj),
+ 			        headers: {
+ 			            'Content-Type': 'application/json',
+ 			        },
+ 			    });
+ 			    // Отправляем (асинхронно!)
+ 			    fetch(request).then(
+ 			        function(response) {
+ 			            // Запрос успешно выполнен
+ 			            console.log(response);
+ 			            // return response.json() и так далее см. документацию
+ 			        },
+ 			        function(error) {
+ 			            // Запрос не получилось отправить
+ 			            console.error(error);
+ 			        }
+ 			    );
+ 			    // Код после fetch выполнится ПЕРЕД получением ответа
+ 			    // на запрос, потому что запрос выполняется асинхронно,
+ 			    // отдельно от основного кода
+ 			    console.log('Запрос отправляется');
+ 			}
+ 		</script>
 
         <hr>
 
