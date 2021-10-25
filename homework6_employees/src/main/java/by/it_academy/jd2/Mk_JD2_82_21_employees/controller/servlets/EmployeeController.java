@@ -72,6 +72,15 @@ public class EmployeeController{
         return "newEmployeeCard";
     }
 
+
+    //Получение карточки сотрудника по ID
+    @RequestMapping(value = "/card", method = RequestMethod.GET)
+    public String getEmployeeCardNew(Model model, @RequestParam(value = "id",required = false) long id){
+        Employee employee = employeeService.getEmployee(id);
+        model.addAttribute("employee", employee);
+        return "newEmployeeCard";
+    }
+
     //Перенаправление на сервлет для получения карточки по ID
     @RequestMapping(value = "/getId", method = RequestMethod.GET)
     public String get(Model model, @RequestParam(value = "getId", required = false) String getId){

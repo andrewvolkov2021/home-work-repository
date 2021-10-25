@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "AutoFillServlet", urlPatterns = "/autoFill")
+@WebServlet(name = "AutoFillServlet", urlPatterns = "/autoFillOLD")
 public class AutoFillServlet extends HttpServlet {
 
     private static final String EMPLOYEE_COUNT_PARAM_MANE = "count";
@@ -21,11 +21,13 @@ public class AutoFillServlet extends HttpServlet {
         this.autoFillerService = ApplicationContextUtil.getContext().getBean(IAutoFillerService.class);
     }
 
-    @Override
+   /* @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int count = Integer.parseInt(req.getParameter(EMPLOYEE_COUNT_PARAM_MANE));
         autoFillerService.fillDateBase(count);
 
         req.getRequestDispatcher("/views/start.jsp").forward(req, resp);
     }
+    */
 }
+

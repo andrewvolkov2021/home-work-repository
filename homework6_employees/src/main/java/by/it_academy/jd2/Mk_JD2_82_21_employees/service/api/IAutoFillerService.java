@@ -1,5 +1,7 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.service.api;
 
+import by.it_academy.jd2.Mk_JD2_82_21_employees.model.AutoFiller;
+
 public interface IAutoFillerService {
-    void fillDateBase(int countEmployee);
+    void fillDateBase(AutoFiller autoFiller);
 }

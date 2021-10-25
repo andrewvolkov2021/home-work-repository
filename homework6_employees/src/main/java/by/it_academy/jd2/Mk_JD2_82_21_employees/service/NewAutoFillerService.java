@@ -1,5 +1,6 @@
 package by.it_academy.jd2.Mk_JD2_82_21_employees.service;
 
+import by.it_academy.jd2.Mk_JD2_82_21_employees.model.AutoFiller;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Department;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Employee;
 import by.it_academy.jd2.Mk_JD2_82_21_employees.model.Position;
@@ -34,7 +35,7 @@ public class NewAutoFillerService implements IAutoFillerService {
     }
 
     @Override
-    public void fillDateBase(int countEmployee) {
+    public void fillDateBase(AutoFiller autoFiller) {
         List<String> listOfPositionNames = FilePositionStorage.getInstance().getListOfPositionNames();
         List<Position> listOfPositions = getListOfPositions(listOfPositionNames);
         positionService.autoAddingPositions(listOfPositions);
@@ -55,7 +56,7 @@ public class NewAutoFillerService implements IAutoFillerService {
 
         List<String> listOfEmployeeNames = FileEmployeeStorage.getInstance().getArrayOfNames();
         String[] arrayOfEmployee = listOfEmployeeNames.toArray(new String[0]);
-        List<Employee> listOfEmployee = getListOfEmployee(countEmployee, arrayOfEmployee,
+        List<Employee> listOfEmployee = getListOfEmployee(autoFiller.getCount(), arrayOfEmployee,
                 id, arrayOfPositionId);
 
        employeeService.autoAddingOfEmployees(listOfEmployee);
