@@ -51,7 +51,6 @@
         <servlet-name>SearchServlet</servlet-name>
     </filter-mapping>
 
-
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:service.xml</param-value>

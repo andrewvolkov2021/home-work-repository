@@ -18,4 +18,11 @@
         <property name="prefix" value="/views/"/>
     </bean>
 
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/api/autoFiller"/>
+            <bean class="by.it_academy.jd2.Mk_JD2_82_21_employees.controller.interceptors.AutoFillInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
 </beans>
