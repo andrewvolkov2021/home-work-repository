@@ -30,83 +30,83 @@ public class DepartmentStorageHibernate implements IDepartmentStorage {
 
     @Override
     public Department getDepartment(long id) {
-               Session sessionOne = sessionFactory.openSession();
-        sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
-        CriteriaQuery<Department> criteriaQuery = criteriaBuilder.createQuery(Department.class);
-        Root<Department> itemRoot = criteriaQuery.from(Department.class);
-        criteriaQuery.select(itemRoot);
-        criteriaQuery.where(criteriaBuilder.equal(itemRoot.get("id"), id));
-        Department department = sessionOne.createQuery(criteriaQuery).getSingleResult();
-        sessionOne.getTransaction().commit();
-        sessionOne.close();
-        return department;
+        try (Session sessionOne = sessionFactory.openSession()){
+            sessionOne.beginTransaction();
+            CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
+            CriteriaQuery<Department> criteriaQuery = criteriaBuilder.createQuery(Department.class);
+            Root<Department> itemRoot = criteriaQuery.from(Department.class);
+            criteriaQuery.select(itemRoot);
+            criteriaQuery.where(criteriaBuilder.equal(itemRoot.get("id"), id));
+            Department department = sessionOne.createQuery(criteriaQuery).getSingleResult();
+            sessionOne.getTransaction().commit();
+            return department;
+        }
     }
 
     @Override
     public List<Department> getListOfDepartments() {
-        Session sessionOne = sessionFactory.openSession();
-        sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
-        CriteriaQuery<Department> criteriaQuery = criteriaBuilder.createQuery(Department.class);
-        Root<Department> itemRoot = criteriaQuery.from(Department.class);
-        criteriaQuery.select(itemRoot);
-        List<Department> departmentList = sessionOne.createQuery(criteriaQuery).getResultList();
-        sessionOne.getTransaction().commit();
-        sessionOne.close();
-        return departmentList;
+        try (Session sessionOne = sessionFactory.openSession()){
+            sessionOne.beginTransaction();
+            CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
+            CriteriaQuery<Department> criteriaQuery = criteriaBuilder.createQuery(Department.class);
+            Root<Department> itemRoot = criteriaQuery.from(Department.class);
+            criteriaQuery.select(itemRoot);
+            List<Department> departmentList = sessionOne.createQuery(criteriaQuery).getResultList();
+            sessionOne.getTransaction().commit();
+            return departmentList;
+        }
     }
 
     @Override
     public void autoAddingDepartments(List<Department> listOfDepartments) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        listOfDepartments.forEach(x -> session.save(x));
-        session.getTransaction().commit();
-        session.close();
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
+            listOfDepartments.forEach(x -> session.save(x));
+            session.getTransaction().commit();
+        }
     }
 
     @Override
     public List<Long> getListOfDepartmentId() {
-        Session sessionOne = sessionFactory.openSession();
-        sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
-        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
-        Root<Department> itemRoot = criteriaQuery.from(Department.class);
-        criteriaQuery.select(itemRoot.get("id"));
-        List<Long> departmentListId = sessionOne.createQuery(criteriaQuery).getResultList();
-        sessionOne.getTransaction().commit();
-        sessionOne.close();
-        return departmentListId;
+        try (Session sessionOne = sessionFactory.openSession()){
+            sessionOne.beginTransaction();
+            CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
+            CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+            Root<Department> itemRoot = criteriaQuery.from(Department.class);
+            criteriaQuery.select(itemRoot.get("id"));
+            List<Long> departmentListId = sessionOne.createQuery(criteriaQuery).getResultList();
+            sessionOne.getTransaction().commit();
+            return departmentListId;
+        }
     }
 
     @Override
     public void autoAddingParentalDepartment(Long[] array, Integer[] arrayOfParentalDepartment) {
-        Session sessionOne = sessionFactory.openSession();
-        sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
+        try (Session sessionOne = sessionFactory.openSession()){
+            sessionOne.beginTransaction();
+            CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
 
-        for (int i = 0; i < array.length; i++) {
-            long departmentId = array[i];
-            int a = arrayOfParentalDepartment[i];
-            if (a != 0) {
-                long parentalId = array[a - 1];
+            for (int i = 0; i < array.length; i++) {
+                long departmentId = array[i];
+                int a = arrayOfParentalDepartment[i];
+                if (a != 0) {
+                    long parentalId = array[a - 1];
 
-                CriteriaQuery<Department> criteriaQuery = criteriaBuilder.createQuery(Department.class);
-                Root<Department> itemRoot = criteriaQuery.from(Department.class);
-                criteriaQuery.select(itemRoot);
+                    CriteriaQuery<Department> criteriaQuery = criteriaBuilder.createQuery(Department.class);
+                    Root<Department> itemRoot = criteriaQuery.from(Department.class);
+                    criteriaQuery.select(itemRoot);
 
-                criteriaQuery.where(criteriaBuilder.equal(itemRoot.get("id"), departmentId));
-                Department department = sessionOne.createQuery(criteriaQuery).getSingleResult();
+                    criteriaQuery.where(criteriaBuilder.equal(itemRoot.get("id"), departmentId));
+                    Department department = sessionOne.createQuery(criteriaQuery).getSingleResult();
 
-                criteriaQuery.where(criteriaBuilder.equal(itemRoot.get("id"), parentalId));
-                Department parentalDepartment = sessionOne.createQuery(criteriaQuery).getSingleResult();
+                    criteriaQuery.where(criteriaBuilder.equal(itemRoot.get("id"), parentalId));
+                    Department parentalDepartment = sessionOne.createQuery(criteriaQuery).getSingleResult();
 
-                department.setParentalDepartment(parentalDepartment);
-                sessionOne.update(department);
+                    department.setParentalDepartment(parentalDepartment);
+                    sessionOne.update(department);
+                }
             }
+            sessionOne.getTransaction().commit();
         }
-        sessionOne.getTransaction().commit();
-        sessionOne.close();
     }
 }

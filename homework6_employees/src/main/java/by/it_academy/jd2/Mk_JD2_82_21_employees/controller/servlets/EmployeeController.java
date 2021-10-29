@@ -73,7 +73,7 @@ public class EmployeeController{
     }
 
 
-    //Получение карточки сотрудника по ID
+    //Получение карточки сотрудника по ID(Id передается через форму)
     @RequestMapping(value = "/card", method = RequestMethod.GET)
     public String getEmployeeCardNew(Model model, @RequestParam(value = "id",required = false) long id){
         Employee employee = employeeService.getEmployee(id);

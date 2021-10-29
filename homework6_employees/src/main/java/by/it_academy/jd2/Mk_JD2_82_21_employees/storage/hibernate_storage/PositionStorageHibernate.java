@@ -30,39 +30,39 @@ public class PositionStorageHibernate implements IPositionStorage {
 
     @Override
     public Position getPosition(long id) {
-        Session sessionOne = sessionFactory.openSession();
-        sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
-        CriteriaQuery<Position> criteriaQuery = criteriaBuilder.createQuery(Position.class);
-        Root<Position> itemRoot = criteriaQuery.from(Position.class);
-        criteriaQuery.select(itemRoot);
-        criteriaQuery.where(criteriaBuilder.equal(itemRoot.get("id"), id));
-        Position position = sessionOne.createQuery(criteriaQuery).getSingleResult();
-        sessionOne.getTransaction().commit();
-        sessionOne.close();
-        return position;
+        try (Session sessionOne = sessionFactory.openSession()) {
+            sessionOne.beginTransaction();
+            CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
+            CriteriaQuery<Position> criteriaQuery = criteriaBuilder.createQuery(Position.class);
+            Root<Position> itemRoot = criteriaQuery.from(Position.class);
+            criteriaQuery.select(itemRoot);
+            criteriaQuery.where(criteriaBuilder.equal(itemRoot.get("id"), id));
+            Position position = sessionOne.createQuery(criteriaQuery).getSingleResult();
+            sessionOne.getTransaction().commit();
+            return position;
+        }
     }
 
     @Override
     public List<Position> getListOfPositions() {
-        Session sessionOne = sessionFactory.openSession();
-        sessionOne.beginTransaction();
-        CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
-        CriteriaQuery<Position> criteriaQuery = criteriaBuilder.createQuery(Position.class);
-        Root<Position> itemRoot = criteriaQuery.from(Position.class);
-        criteriaQuery.select(itemRoot);
-        List<Position> positionList = sessionOne.createQuery(criteriaQuery).getResultList();
-        sessionOne.getTransaction().commit();
-        sessionOne.close();
-        return positionList;
+        try (Session sessionOne = sessionFactory.openSession()){
+            sessionOne.beginTransaction();
+            CriteriaBuilder criteriaBuilder = sessionFactory.createEntityManager().getCriteriaBuilder();
+            CriteriaQuery<Position> criteriaQuery = criteriaBuilder.createQuery(Position.class);
+            Root<Position> itemRoot = criteriaQuery.from(Position.class);
+            criteriaQuery.select(itemRoot);
+            List<Position> positionList = sessionOne.createQuery(criteriaQuery).getResultList();
+            sessionOne.getTransaction().commit();
+            return positionList;
+        }
     }
 
     @Override
     public void autoAddingPositions(List<Position> listOfPosition) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        listOfPosition.forEach(x -> session.save(x));
-        session.getTransaction().commit();
-        session.close();
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
+            listOfPosition.forEach(x -> session.save(x));
+            session.getTransaction().commit();
+        }
     }
 }
