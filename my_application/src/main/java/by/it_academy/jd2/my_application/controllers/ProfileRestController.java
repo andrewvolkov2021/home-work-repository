@@ -1,6 +1,6 @@
 package by.it_academy.jd2.my_application.controllers;
 
-import by.it_academy.jd2.my_application.models.Product;
+import by.it_academy.jd2.my_application.models.Profile;
 import by.it_academy.jd2.my_application.servicies.api.IEntityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product")
-public class ProductRestController {
+@RequestMapping("/profile")
+public class ProfileRestController {
 
-    private final IEntityService<Product> productService;
+    private final IEntityService<Profile> profileService;
 
-    public ProductRestController(IEntityService<Product> productService){
-        this.productService = productService;
+    public ProfileRestController(IEntityService<Profile> profileService){
+        this.profileService = profileService;
     }
 
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody Product product){
+    public ResponseEntity<?> createProfile(@RequestBody Profile profile){
         try {
-            productService.createEntity(product);
+            profileService.createEntity(profile);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -29,10 +29,10 @@ public class ProductRestController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable("id") Long id,
-                                           @RequestBody Product product) {
+    public ResponseEntity<?> updateProfile(@PathVariable("id") Long id,
+                                           @RequestBody Profile profile) {
         try {
-            productService.updateEntity(product, id);
+            profileService.updateEntity(profile, id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -40,9 +40,9 @@ public class ProductRestController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteProfile(@PathVariable("id") Long id) {
         try {
-            productService.deleteEntity(id);
+            profileService.deleteEntity(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -50,18 +50,18 @@ public class ProductRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts(@RequestParam("page") int page,
+    public ResponseEntity<List<Profile>> getAllProfiles(@RequestParam("page") int page,
                                                         @RequestParam("size") int size,
                                                         @RequestParam("name") String name){
-        List<Product> products = productService.getAllEntities();
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        List<Profile> profiles = profileService.getAllEntities();
+        return new ResponseEntity<>(profiles, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable("id") Long id) {
+    public ResponseEntity<Profile> getProfile(@PathVariable("id") Long id) {
         try {
-            Product product = productService.getEntity(id);
-            return new ResponseEntity<>(product, HttpStatus.OK);
+            Profile profile = profileService.getEntity(id);
+            return new ResponseEntity<>(profile, HttpStatus.OK);
         } catch (IllegalArgumentException  ex) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

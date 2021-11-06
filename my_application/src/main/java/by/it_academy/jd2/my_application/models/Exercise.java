@@ -4,33 +4,21 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "exercises")
+public class Exercise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name_product")
+    @Column(name = "name_exercise")
     private String name;
 
-    @Column(name = "brand_product")
-    private String brand;
-
-    @Column(name = "calories_product")
+    @Column(name = "calories_exercise")
     private double calories;
 
-    @Column(name = "proteins_product")
-    private double proteins;
-
-    @Column(name = "fats_product")
-    private double fats;
-
-    @Column(name = "carbohydrates_product")
-    private double carbohydrates;
-
-    @Column(name = "measure_product")
-    private double measure;
+    @OneToOne
+    private Profile profile;
 
     @OneToOne
     private User creator;
@@ -41,7 +29,7 @@ public class Product {
     @Column(name = "update_time")
     private LocalDateTime updateDate;
 
-    public Product() {
+    public Exercise() {
     }
 
     public long getId() {
@@ -60,14 +48,6 @@ public class Product {
         this.name = name;
     }
 
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
     public double getCalories() {
         return calories;
     }
@@ -76,36 +56,12 @@ public class Product {
         this.calories = calories;
     }
 
-    public double getProteins() {
-        return proteins;
+    public Profile getProfile() {
+        return profile;
     }
 
-    public void setProteins(double proteins) {
-        this.proteins = proteins;
-    }
-
-    public double getFats() {
-        return fats;
-    }
-
-    public void setFats(double fats) {
-        this.fats = fats;
-    }
-
-    public double getCarbohydrates() {
-        return carbohydrates;
-    }
-
-    public void setCarbohydrates(double carbohydrates) {
-        this.carbohydrates = carbohydrates;
-    }
-
-    public double getMeasure() {
-        return measure;
-    }
-
-    public void setMeasure(double measure) {
-        this.measure = measure;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public User getCreator() {
