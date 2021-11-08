@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "measurements")
-public class WeightMeasurement {
+public class Weighting {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class WeightMeasurement {
     @Column(name = "update_time")
     private LocalDateTime updateDate;
 
-    public WeightMeasurement() {
+    public Weighting() {
     }
 
     public long getId() {

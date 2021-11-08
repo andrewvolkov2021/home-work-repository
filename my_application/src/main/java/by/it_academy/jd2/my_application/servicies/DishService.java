@@ -2,14 +2,14 @@ package by.it_academy.jd2.my_application.servicies;
 
 import by.it_academy.jd2.my_application.dao.api.IDishDao;
 import by.it_academy.jd2.my_application.models.Dish;
-import by.it_academy.jd2.my_application.servicies.api.IEntityService;
+import by.it_academy.jd2.my_application.servicies.api.IDishService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class DishService implements IEntityService<Dish> {
+public class DishService implements IDishService {
 
     private final IDishDao dishDao;
 
@@ -18,7 +18,7 @@ public class DishService implements IEntityService<Dish> {
     }
 
     @Override
-    public void createEntity(Dish dish) throws IllegalArgumentException {
+    public void createDish(Dish dish) throws IllegalArgumentException {
         LocalDateTime creationDate = LocalDateTime.now();
         dish.setCreationDate(creationDate);
         dish.setUpdateDate(creationDate);
@@ -26,18 +26,18 @@ public class DishService implements IEntityService<Dish> {
     }
 
     @Override
-    public List<Dish> getAllEntities() {
+    public List<Dish> getListOfDishes(long page, long size, String name) {
         return dishDao.findAll();
     }
 
     @Override
-    public Dish getEntity(long id) throws IllegalArgumentException {
+    public Dish getDish(long id) throws IllegalArgumentException {
         return dishDao.findById(id).orElse(null);
     }
 
     @Override
-    public void updateEntity(Dish dish, long id) throws IllegalArgumentException{
-        Dish updatedDish = getEntity(id);
+    public void updateDish(Dish dish, long id, LocalDateTime dt_update) throws IllegalArgumentException{
+        Dish updatedDish = getDish(id);
         updatedDish.setName(dish.getName());
         updatedDish.setComponents(dish.getComponents());
         updatedDish.setCreator(dish.getCreator());
@@ -50,7 +50,7 @@ public class DishService implements IEntityService<Dish> {
     }
 
     @Override
-    public void deleteEntity(long id) throws IllegalArgumentException {
+    public void deleteDish(long id, LocalDateTime dt_update) throws IllegalArgumentException {
         dishDao.deleteById(id);
     }
 }

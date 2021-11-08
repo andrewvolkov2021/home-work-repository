@@ -2,14 +2,14 @@ package by.it_academy.jd2.my_application.servicies;
 
 import by.it_academy.jd2.my_application.dao.api.IJournalDao;
 import by.it_academy.jd2.my_application.models.Journal;
-import by.it_academy.jd2.my_application.servicies.api.IEntityService;
+import by.it_academy.jd2.my_application.servicies.api.IJournalService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class JournalService implements IEntityService<Journal> {
+public class JournalService implements IJournalService {
 
     private final IJournalDao journalDao;
 
@@ -18,7 +18,7 @@ public class JournalService implements IEntityService<Journal> {
     }
 
     @Override
-    public void createEntity(Journal journal) throws IllegalArgumentException {
+    public void createJournal(Journal journal) throws IllegalArgumentException {
         LocalDateTime creationDate = LocalDateTime.now();
         journal.setCreationDate(creationDate);
         journal.setUpdateDate(creationDate);
@@ -26,24 +26,28 @@ public class JournalService implements IEntityService<Journal> {
     }
 
     @Override
-    public List<Journal> getAllEntities() {
+    public List<Journal> getListOfJournals(long page, long size) {
         return journalDao.findAll();
     }
 
     @Override
-    public Journal getEntity(long id) throws IllegalArgumentException {
+    public List<Journal> getListOfJournalsFPerDay(LocalDateTime day) {
+        return journalDao.findAll();
+    }
+
+    @Override
+    public Journal getJournal(long id) throws IllegalArgumentException {
         return journalDao.findById(id).orElseThrow();
     }
 
     @Override
-    public void updateEntity(Journal journal, long id) throws IllegalArgumentException {
-        Journal updatedJournal = getEntity(id);
-        updatedJournal.setTypeOfEating(journal.getTypeOfEating());
-        updatedJournal.setUser(journal.getUser());
+    public void updateJournal(Journal journal, long id, LocalDateTime dt_update) throws IllegalArgumentException {
+        Journal updatedJournal = getJournal(id);
+        updatedJournal.setEating(journal.getEating());
+        updatedJournal.setProfile(journal.getProfile());
         updatedJournal.setProduct(journal.getProduct());
         updatedJournal.setDish(journal.getDish());
         updatedJournal.setMeasure(journal.getMeasure());
-        updatedJournal.setCreator(journal.getCreator());
         updatedJournal.setCreationDate(journal.getCreationDate());
 
         LocalDateTime updateDate = LocalDateTime.now();
@@ -53,7 +57,7 @@ public class JournalService implements IEntityService<Journal> {
     }
 
     @Override
-    public void deleteEntity(long id) throws IllegalArgumentException{
+    public void deleteJournal(long id, LocalDateTime dt_update) throws IllegalArgumentException{
         journalDao.deleteById(id);
     }
 }

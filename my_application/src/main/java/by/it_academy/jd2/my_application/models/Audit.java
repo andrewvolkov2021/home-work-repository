@@ -23,27 +23,16 @@ public class Audit {
     private ETypeOfEntity typeOfEntity;
 
     @Column(name = "id_entity")
-    private long idOfEntity;
-
-    @OneToOne
-    private User creator;
+    private long entityId;
 
     @Column(name = "creation_time")
     private LocalDateTime creationDate;
-
-    @Column(name = "update_time")
-    private LocalDateTime updateDate;
-
 
     public Audit() {
     }
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public User getUser() {
@@ -70,20 +59,12 @@ public class Audit {
         this.typeOfEntity = typeOfEntity;
     }
 
-    public long getIdOfEntity() {
-        return idOfEntity;
+    public long getEntityId() {
+        return entityId;
     }
 
-    public void setIdOfEntity(long idOfEntity) {
-        this.idOfEntity = idOfEntity;
-    }
-
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setEntityId(long entityId) {
+        this.entityId = entityId;
     }
 
     public LocalDateTime getCreationDate() {
@@ -92,13 +73,5 @@ public class Audit {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public LocalDateTime getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(LocalDateTime updateDate) {
-        this.updateDate = updateDate;
     }
 }

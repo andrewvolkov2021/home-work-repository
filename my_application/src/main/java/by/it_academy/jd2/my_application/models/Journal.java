@@ -14,10 +14,10 @@ public class Journal {
     private long id;
 
     @Column(name = "eating")
-    private EEating typeOfEating;
+    private EEating eating;
 
     @OneToOne
-    private User user;
+    private Profile profile;
 
     @OneToOne
     private Product product;
@@ -27,9 +27,6 @@ public class Journal {
 
     @Column(name = "measure_eating")
     private double measure;
-
-    @OneToOne
-    private User creator;
 
     @Column(name = "creation_time")
     private LocalDateTime creationDate;
@@ -44,24 +41,20 @@ public class Journal {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public EEating getEating() {
+        return eating;
     }
 
-    public EEating getTypeOfEating() {
-        return typeOfEating;
+    public void setEating(EEating eating) {
+        this.eating = eating;
     }
 
-    public void setTypeOfEating(EEating typeOfEating) {
-        this.typeOfEating = typeOfEating;
+    public Profile getProfile() {
+        return profile;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public Product getProduct() {
@@ -86,14 +79,6 @@ public class Journal {
 
     public void setMeasure(double measure) {
         this.measure = measure;
-    }
-
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
     }
 
     public LocalDateTime getCreationDate() {

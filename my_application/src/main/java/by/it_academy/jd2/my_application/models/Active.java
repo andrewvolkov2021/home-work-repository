@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "exercises")
-public class Exercise {
+public class Active {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,24 +20,17 @@ public class Exercise {
     @OneToOne
     private Profile profile;
 
-    @OneToOne
-    private User creator;
-
     @Column(name = "creation_time")
     private LocalDateTime creationDate;
 
     @Column(name = "update_time")
     private LocalDateTime updateDate;
 
-    public Exercise() {
+    public Active() {
     }
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -62,14 +55,6 @@ public class Exercise {
 
     public void setProfile(Profile profile) {
         this.profile = profile;
-    }
-
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
     }
 
     public LocalDateTime getCreationDate() {

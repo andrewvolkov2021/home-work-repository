@@ -1,6 +1,7 @@
 package by.it_academy.jd2.my_application.models;
 
 import by.it_academy.jd2.my_application.models.api.ERole;
+import by.it_academy.jd2.my_application.models.api.EStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,8 +26,8 @@ public class User {
     @Column(name = "role_user")
     private ERole role;
 
-    @OneToOne
-    private User creator;
+    @Column(name = "status_user")
+    private EStatus status;
 
     @Column(name = "creation_time")
     private LocalDateTime creationDate;
@@ -39,10 +40,6 @@ public class User {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -77,12 +74,12 @@ public class User {
         this.role = role;
     }
 
-    public User getCreator() {
-        return creator;
+    public EStatus getStatus() {
+        return status;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setStatus(EStatus status) {
+        this.status = status;
     }
 
     public LocalDateTime getCreationDate() {

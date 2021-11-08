@@ -3,6 +3,7 @@ package by.it_academy.jd2.my_application.models;
 import by.it_academy.jd2.my_application.models.api.EActivity;
 import by.it_academy.jd2.my_application.models.api.ESex;
 import by.it_academy.jd2.my_application.models.api.ETarget;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class Profile {
     private double weight;
 
     @Column(name = "birthday_profile")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDateTime birthdayDate;
 
     @Column(name = "sex_profile")
@@ -36,8 +38,8 @@ public class Profile {
     @Column(name = "target_profile")
     private ETarget target;
 
-    @OneToOne
-    private User creator;
+    @Column(name = "target_weight")
+    private double targetWeight;
 
     @Column(name = "creation_time")
     private LocalDateTime creationDate;
@@ -50,10 +52,6 @@ public class Profile {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public User getUser() {
@@ -112,12 +110,12 @@ public class Profile {
         this.target = target;
     }
 
-    public User getCreator() {
-        return creator;
+    public double getTargetWeight() {
+        return targetWeight;
     }
 
-    public void setCreator(User creator) {
-        this.creator = creator;
+    public void setTargetWeight(double targetWeight) {
+        this.targetWeight = targetWeight;
     }
 
     public LocalDateTime getCreationDate() {

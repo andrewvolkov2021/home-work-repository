@@ -1,50 +1,51 @@
 package by.it_academy.jd2.my_application.controllers;
 
 import by.it_academy.jd2.my_application.models.Journal;
-import by.it_academy.jd2.my_application.servicies.api.IEntityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import by.it_academy.jd2.my_application.servicies.api.IJournalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/food_diary")
+@RequestMapping("/api/profile/{id_profile}/journal/food")
 public class JournalRestController {
 
-    private final IEntityService<Journal> diaryService;
+    private final IJournalService journalService;
 
-    @Autowired
-    public JournalRestController(IEntityService<Journal> diaryService){
-        this.diaryService = diaryService;
+    public JournalRestController(IJournalService journalService){
+        this.journalService = journalService;
     }
 
     @PostMapping
     public ResponseEntity<?> createJournal(@RequestBody Journal journal){
         try {
-            diaryService.createEntity(journal);
+            journalService.createJournal(journal);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<?> updateJournal(@PathVariable("id") Long id,
+    @PutMapping(value = "/{id_food}/dt_update/{dt_update}")
+    public ResponseEntity<?> updateJournal(@PathVariable("id_food") Long id,
+                                           @PathVariable("dt_update") LocalDateTime dt_update,
                                            @RequestBody Journal journal){
         try {
-            diaryService.updateEntity(journal, id);
+            journalService.updateJournal(journal, id, dt_update);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteJournal(@PathVariable("id") Long id) {
+    @DeleteMapping(value = "/{id_food}/dt_update/{dt_update}")
+    public ResponseEntity<?> deleteJournal(@PathVariable("id_food") Long id,
+                                           @PathVariable("dt_update") LocalDateTime dt_update) {
         try {
-            diaryService.deleteEntity(id);
+            journalService.deleteJournal(id, dt_update);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -53,16 +54,21 @@ public class JournalRestController {
 
     @GetMapping
     public ResponseEntity<List<Journal>> getAllJournals(@RequestParam("page") int page,
-                                                        @RequestParam("size") int size,
-                                                        @RequestParam("name") String name){
-        List<Journal> journals = diaryService.getAllEntities();
+                                                        @RequestParam("size") int size){
+        List<Journal> journals = journalService.getListOfJournals(page, size);
         return new ResponseEntity<>(journals, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Journal> getJournal(@PathVariable("id") Long id) {
+    @GetMapping(value = "/{day}")
+    public ResponseEntity<List<Journal>> getJournalsPerDay(@PathVariable("day") LocalDateTime day){
+        List<Journal> journalsByDay =  journalService.getListOfJournalsFPerDay(day);
+        return new ResponseEntity<>(journalsByDay, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id_food}")
+    public ResponseEntity<Journal> getJournal(@PathVariable("id_food") Long id) {
         try {
-            Journal journal = diaryService.getEntity(id);
+            Journal journal = journalService.getJournal(id);
             return new ResponseEntity<>(journal, HttpStatus.OK);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

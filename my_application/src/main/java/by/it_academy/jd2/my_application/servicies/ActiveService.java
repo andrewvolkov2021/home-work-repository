@@ -1,24 +1,24 @@
 package by.it_academy.jd2.my_application.servicies;
 
-import by.it_academy.jd2.my_application.dao.api.IExerciseDao;
-import by.it_academy.jd2.my_application.models.Exercise;
-import by.it_academy.jd2.my_application.servicies.api.IEntityService;
+import by.it_academy.jd2.my_application.dao.api.IActiveDao;
+import by.it_academy.jd2.my_application.models.Active;
+import by.it_academy.jd2.my_application.servicies.api.IActiveService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class ExerciseService implements IEntityService<Exercise> {
+public class ActiveService implements IActiveService {
 
-    private final IExerciseDao exerciseDao;
+    private final IActiveDao exerciseDao;
 
-    public ExerciseService(IExerciseDao exerciseDao) {
+    public ActiveService(IActiveDao exerciseDao) {
         this.exerciseDao = exerciseDao;
     }
 
     @Override
-    public void createEntity(Exercise exercise) throws IllegalArgumentException {
+    public void createActive(Active exercise) throws IllegalArgumentException {
         LocalDateTime creationDate = LocalDateTime.now();
         exercise.setCreationDate(creationDate);
         exercise.setUpdateDate(creationDate);
@@ -26,22 +26,21 @@ public class ExerciseService implements IEntityService<Exercise> {
     }
 
     @Override
-    public List<Exercise> getAllEntities() {
+    public List<Active> getListOfActives(long page, long size, LocalDateTime start, LocalDateTime end) {
         return exerciseDao.findAll();
     }
 
     @Override
-    public Exercise getEntity(long id) throws IllegalArgumentException  {
+    public Active getActive(long id) throws IllegalArgumentException  {
         return exerciseDao.findById(id).orElseThrow();
     }
 
     @Override
-    public void updateEntity(Exercise exercise, long id) throws IllegalArgumentException {
-        Exercise updatedExercise = getEntity(id);
+    public void updateActive(Active exercise, long id, LocalDateTime dt_update) throws IllegalArgumentException {
+        Active updatedExercise = getActive(id);
         updatedExercise.setName(exercise.getName());
         updatedExercise.setCalories(exercise.getCalories());
         updatedExercise.setProfile(exercise.getProfile());
-        updatedExercise.setCreator(exercise.getCreator());
         updatedExercise.setCreationDate(exercise.getCreationDate());
 
         LocalDateTime updateDate = LocalDateTime.now();
@@ -51,7 +50,7 @@ public class ExerciseService implements IEntityService<Exercise> {
     }
 
     @Override
-    public void deleteEntity(long id) throws IllegalArgumentException {
+    public void deleteActive(long id, LocalDateTime dt_update) throws IllegalArgumentException {
         exerciseDao.deleteById(id);
     }
 }
