@@ -1,15 +1,16 @@
-package by.it_academy.jd2.my_application.servicies;
+package by.it_academy.jd2.my_application.services.dataBaseService;
 
 import by.it_academy.jd2.my_application.dao.api.IAuditDao;
 import by.it_academy.jd2.my_application.models.Audit;
-import by.it_academy.jd2.my_application.servicies.api.IAuditService;
+import by.it_academy.jd2.my_application.services.dataBaseService.api.IAuditGeneralService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
-public class AuditService implements IAuditService {
+public class AuditService implements IAuditGeneralService {
 
     private final IAuditDao auditDao;
 
@@ -18,24 +19,24 @@ public class AuditService implements IAuditService {
     }
 
     @Override
-    public List<Audit> getListOfAudits(long page, long size, LocalDateTime begin, LocalDateTime end) {
-        return auditDao.findAll();
-    }
-
-    @Override
-    public void createAudit(Audit audit) throws IllegalArgumentException {
+    public void save(Audit audit) {
         LocalDateTime creationDate = LocalDateTime.now();
         audit.setCreationDate(creationDate);
         auditDao.save(audit);
     }
 
     @Override
-    public Audit getAudit(long id) throws IllegalArgumentException {
+    public Page<Audit> getAll(Pageable pageable) {
+        return auditDao.findAll(pageable);
+    }
+
+    @Override
+    public Audit get(Long id) throws IllegalArgumentException {
         return auditDao.findById(id).orElseThrow();
     }
 
     @Override
-    public void deleteAudit(long id, LocalDateTime dt_update) throws IllegalArgumentException {
+    public void delete(Long id, LocalDateTime dt_update){
         auditDao.deleteById(id);
     }
 }

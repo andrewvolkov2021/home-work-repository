@@ -4,9 +4,8 @@ public enum ETypeOfEntity {
     PRODUCT,
     DISH,
     USER,
-    AUDIT,
     PROFILE,
     JOURNAL,
-    EXERCISE,
-    MEASUREMENT
+    ACTIVE,
+    WEIGHTING
 }
