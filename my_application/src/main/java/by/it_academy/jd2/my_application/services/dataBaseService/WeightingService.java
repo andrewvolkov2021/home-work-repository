@@ -1,7 +1,10 @@
 package by.it_academy.jd2.my_application.services.dataBaseService;
 
 import by.it_academy.jd2.my_application.dao.api.IWeighingDao;
+import by.it_academy.jd2.my_application.dto.WeightingByDateDto;
+import by.it_academy.jd2.my_application.dto.WeightingDto;
 import by.it_academy.jd2.my_application.models.Weighting;
+import by.it_academy.jd2.my_application.security.UserHolder;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IWeightingService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,13 +17,20 @@ import java.time.LocalDateTime;
 public class WeightingService implements IWeightingService {
 
     private final IWeighingDao weightingDao;
+    private final UserHolder userHolder;
 
-    public WeightingService(IWeighingDao weightingDao) {
+    public WeightingService(IWeighingDao weightingDao, UserHolder userHolder) {
         this.weightingDao = weightingDao;
+        this.userHolder = userHolder;
     }
 
     @Override
-    public void save(Weighting weighting){
+    public void save(WeightingDto weightingDto){
+        Weighting weighting = new Weighting();
+        weighting.setCreator(userHolder.getUser());
+        weighting.setProfile(weightingDto.getProfile());
+        weighting.setWeight(weightingDto.getWeight());
+
         LocalDateTime creationDate = LocalDateTime.now();
         weighting.setCreationDate(creationDate);
         weighting.setUpdateDate(creationDate);
@@ -38,17 +48,17 @@ public class WeightingService implements IWeightingService {
     }
 
     @Override
-    public void update(Weighting weighting, Long id, LocalDateTime dt_update) throws OptimisticLockException {
+    public void update(WeightingDto weightingDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Weighting updatedWeighting = get(id);
 
-        if (dt_update != updatedWeighting.getUpdateDate()) {
+        if (dtUpdate != updatedWeighting.getUpdateDate()) {
             throw new OptimisticLockException("Обновление не может быть выполнено, так как" +
                     " обновляемое взвешивание было изменено");
         } else {
-            updatedWeighting.setProfile(weighting.getProfile());
-            updatedWeighting.setWeight(weighting.getWeight());
-            updatedWeighting.setCreator(weighting.getCreator());
-            updatedWeighting.setCreationDate(weighting.getCreationDate());
+
+            updatedWeighting.setProfile(weightingDto.getProfile());
+            updatedWeighting.setWeight(weightingDto.getWeight());
+            updatedWeighting.setCreator(userHolder.getUser());
 
             LocalDateTime updateDate = LocalDateTime.now();
             updatedWeighting.setUpdateDate(updateDate);
@@ -58,10 +68,10 @@ public class WeightingService implements IWeightingService {
     }
 
     @Override
-    public void delete(Long id, LocalDateTime dt_update) throws OptimisticLockException {
+    public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Weighting deletedWeighting = get(id);
 
-        if (dt_update != deletedWeighting.getUpdateDate()) {
+        if (dtUpdate != deletedWeighting.getUpdateDate()) {
             throw new OptimisticLockException("Удаление не может быть выполнено, так как" +
                     " удаляемое взвешивание было изменено");
         } else {
@@ -70,9 +80,12 @@ public class WeightingService implements IWeightingService {
     }
 
     @Override
-    public Page<Weighting> findAllByProfileIdAndCreationDate(LocalDateTime start, LocalDateTime end,
-                                                             Long idWeighting, Pageable pageable) {
-
-        return weightingDao.findAllByCreationDateBetweenAndProfileId(start, end, idWeighting, pageable);
+    public WeightingByDateDto findAllByProfileIdAndCreationDate(LocalDateTime start, LocalDateTime end,
+                                                                Long id, Pageable pageable) {
+        WeightingByDateDto weightingByDateDto = new WeightingByDateDto();
+        Page<Weighting> weightings = weightingDao
+                .findAllByCreationDateBetweenAndProfileId(start, end, id, pageable);
+        weightingByDateDto.setWeightings(weightings);
+        return weightingByDateDto;
     }
 }

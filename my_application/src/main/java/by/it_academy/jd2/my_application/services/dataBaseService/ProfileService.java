@@ -38,10 +38,10 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
-    public void update(Profile profile, Long id, LocalDateTime dt_update) throws IllegalArgumentException {
+    public void update(Profile profile, Long id, LocalDateTime dtUpdate) throws IllegalArgumentException {
         Profile updatedProfile = get(id);
 
-        if (dt_update != updatedProfile.getUpdateDate()) {
+        if (dtUpdate != updatedProfile.getUpdateDate()) {
             throw new OptimisticLockException("Обновление не может быть выполнено, так как" +
                     " обновляемый профиль был изменен");
         } else {

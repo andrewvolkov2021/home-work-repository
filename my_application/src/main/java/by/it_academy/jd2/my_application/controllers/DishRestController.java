@@ -1,7 +1,9 @@
 package by.it_academy.jd2.my_application.controllers;
 
+import by.it_academy.jd2.my_application.dto.DishDto;
 import by.it_academy.jd2.my_application.models.Dish;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IDishService;
+import by.it_academy.jd2.my_application.utils.TimeConversion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,18 +20,25 @@ import java.time.LocalDateTime;
 public class DishRestController {
 
     private final IDishService dishService;
+    private final TimeConversion timeConversion;
 
-    public DishRestController(IDishService dishService){
+    public DishRestController(IDishService dishService, TimeConversion timeConversion){
         this.dishService = dishService;
+        this.timeConversion = timeConversion;
     }
-
 
     @GetMapping
     public ResponseEntity<Page<Dish>> getAllDishes(@RequestParam(value = "page", defaultValue = "0") int page,
                                                    @RequestParam(value = "size", defaultValue = "10") int size,
                                                    @RequestParam(value = "name", required = false) String name){
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
-        Page<Dish> dishes = dishService.getAll(pageable);
+        Page<Dish> dishes;
+        if (name != null) {
+            dishes = dishService.getAll(name, pageable);
+        } else {
+            dishes = dishService.getAll(pageable);
+        }
         return new ResponseEntity<>(dishes, HttpStatus.OK);
     }
 
@@ -44,9 +53,9 @@ public class DishRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createDish(@RequestBody Dish dish){
+    public ResponseEntity<?> createDish(@RequestBody DishDto dishDto){
         try {
-            dishService.save(dish);
+            dishService.save(dishDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -55,24 +64,30 @@ public class DishRestController {
 
     @PutMapping(value = "/{id}/dt_update/{dt_update}")
     public ResponseEntity<?> updateDish(@PathVariable("id") Long id,
-                                        @PathVariable("dt_update") LocalDateTime dt_update,
-                                        @RequestBody Dish dish) {
+                                        @PathVariable("dt_update") Long dtUpdate,
+                                        @RequestBody DishDto dishDto) {
         try {
-            dishService.update(dish, id, dt_update);
+            LocalDateTime dtUpdateTime = timeConversion.conversionTime(dtUpdate);
+            dishService.update(dishDto, id, dtUpdateTime);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (OptimisticLockException ex) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping(value = "/{id}/dt_update/{dt_update}")
     public ResponseEntity<?> deleteDish(@PathVariable("id") Long id,
-                                        @PathVariable("dt_update") LocalDateTime dt_update) {
+                                        @PathVariable("dt_update") Long dtUpdate) {
         try {
-            dishService.delete(id, dt_update);
+            LocalDateTime dtUpdateTime = timeConversion.conversionTime(dtUpdate);
+            dishService.delete(id, dtUpdateTime);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (OptimisticLockException ex) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

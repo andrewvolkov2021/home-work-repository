@@ -1,7 +1,9 @@
 package by.it_academy.jd2.my_application.controllers;
 
+import by.it_academy.jd2.my_application.dto.ProductDto;
 import by.it_academy.jd2.my_application.models.Product;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IProductService;
+import by.it_academy.jd2.my_application.utils.TimeConversion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +20,11 @@ import java.time.LocalDateTime;
 public class ProductRestController {
 
     private final IProductService productService;
+    private final TimeConversion timeConversion;
 
-    public ProductRestController(IProductService productService){
+    public ProductRestController(IProductService productService, TimeConversion timeConversion){
         this.productService = productService;
+        this.timeConversion = timeConversion;
     }
 
     @GetMapping
@@ -29,7 +33,12 @@ public class ProductRestController {
                                                         @RequestParam(value = "name", required = false) String name){
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
-        Page<Product> products = productService.getAll(pageable);
+        Page<Product> products;
+        if (name != null) {
+            products = productService.getAll(name, pageable);
+        } else {
+            products = productService.getAll(pageable);
+        }
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
@@ -44,9 +53,9 @@ public class ProductRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody Product product){
+    public ResponseEntity<?> createProduct(@RequestBody ProductDto productDto){
         try {
-            productService.save(product);
+            productService.save(productDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -55,25 +64,31 @@ public class ProductRestController {
 
     @PutMapping("/{id}/dt_update/{dt_update}")
     public ResponseEntity<?> updateProduct(@PathVariable("id") Long id,
-                                           @PathVariable("dt_update") LocalDateTime dt_update,
-                                           @RequestBody Product product) {
+                                           @PathVariable("dt_update") Long dtUpdate,
+                                           @RequestBody ProductDto productDto) {
 
         try {
-            productService.update(product, id, dt_update);
+            LocalDateTime dtUpdateTime = timeConversion.conversionTime(dtUpdate);
+            productService.update(productDto, id, dtUpdateTime);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (OptimisticLockException e) {
+        } catch (OptimisticLockException ex) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}/dt_update/{dt_update}")
     public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id,
-                                           @PathVariable("dt_update") LocalDateTime dt_update) {
+                                           @PathVariable("dt_update") Long dtUpdate) {
         try {
-            productService.delete(id, dt_update);
+            LocalDateTime dtUpdateTime = timeConversion.conversionTime(dtUpdate);
+            productService.delete(id, dtUpdateTime);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (OptimisticLockException e) {
+        } catch (OptimisticLockException ex) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (IllegalArgumentException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }

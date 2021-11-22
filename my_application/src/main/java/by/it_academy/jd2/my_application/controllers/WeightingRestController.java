@@ -1,8 +1,12 @@
 package by.it_academy.jd2.my_application.controllers;
 
+import by.it_academy.jd2.my_application.dto.WeightingByDateDto;
+import by.it_academy.jd2.my_application.dto.WeightingDto;
 import by.it_academy.jd2.my_application.models.Weighting;
+import by.it_academy.jd2.my_application.services.dataBaseService.api.IProfileService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IWeightingService;
-import org.springframework.data.domain.Page;
+import by.it_academy.jd2.my_application.utils.ProfileCheck;
+import by.it_academy.jd2.my_application.utils.TimeConversion;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,73 +22,110 @@ import java.time.LocalDateTime;
 public class WeightingRestController {
 
     private final IWeightingService weightingService;
+    private final IProfileService profileService;
+    private final TimeConversion timeConversion;
+    private final ProfileCheck profileCheck;
 
-    public WeightingRestController(IWeightingService weightingService){
+    public WeightingRestController(IWeightingService weightingService, IProfileService profileService,
+                                   TimeConversion timeConversion, ProfileCheck profileCheck) {
         this.weightingService = weightingService;
+        this.profileService = profileService;
+        this.timeConversion = timeConversion;
+        this.profileCheck = profileCheck;
     }
 
     @GetMapping("/{id_profile}/journal/weight/")
-    public ResponseEntity<Page<Weighting>> getWeightings(@PathVariable("id_profile") Long idProfile,
+    public ResponseEntity<?> getWeightings(@PathVariable("id_profile") Long idProfile,
                                                          @RequestParam(value = "page", defaultValue = "0") int page,
                                                          @RequestParam(value = "size", defaultValue = "10") int size,
-                                                         @RequestParam("dt_start") LocalDateTime start,
-                                                         @RequestParam("dt_end") LocalDateTime end){
+                                                         @RequestParam("dt_start") Long start,
+                                                         @RequestParam("dt_end") Long end){
 
-        try {
-            Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-            Page<Weighting> measurementPage = weightingService
-                    .findAllByProfileIdAndCreationDate(start, end, idProfile, pageable);
-            return new ResponseEntity<>(measurementPage, HttpStatus.OK);
-        } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (profileCheck.checkProfile(idProfile)){
+            try {
+                Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+                LocalDateTime startTime = timeConversion.conversionTime(start);
+                LocalDateTime endTime = timeConversion.conversionTime(end);
+
+                WeightingByDateDto weightingByDateDto = weightingService
+                        .findAllByProfileIdAndCreationDate(startTime, endTime, idProfile, pageable);
+                return new ResponseEntity<>(weightingByDateDto, HttpStatus.OK);
+            } catch (IllegalArgumentException ex) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
     @GetMapping("/{id_profile}/journal/weight/{id_weight}")
     public ResponseEntity<Weighting> getWeighting(@PathVariable("id_profile") Long idProfile,
                                                   @PathVariable("id_weight") Long idWeight) {
-        try {
-            Weighting weighting = weightingService.get(idWeight);
-            return new ResponseEntity<>(weighting, HttpStatus.OK);
-        } catch (IllegalArgumentException  ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        if (profileCheck.checkProfile(idProfile)){
+            try {
+                Weighting weighting = weightingService.get(idWeight);
+                return new ResponseEntity<>(weighting, HttpStatus.OK);
+            } catch (IllegalArgumentException  ex) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
     @PostMapping("/{id_profile}/journal/weight")
     public ResponseEntity<?> createWeighting(@PathVariable("id_profile") Long idProfile,
-                                             @RequestBody Weighting weighting){
+                                             @RequestBody WeightingDto weightingDto){
 
-        try {
-            weightingService.save(weighting);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        if (profileCheck.checkProfile(idProfile)){
+            try {
+                weightingDto.setProfile(profileService.get(idProfile));
+                weightingService.save(weightingDto);
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            } catch (IllegalArgumentException ex) {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
     @PutMapping("/{id_profile}/journal/weight/{id_weight}/dt_update/{dt_update}")
     public ResponseEntity<?> updateWeighting(@PathVariable("id_profile") Long idProfile,
                                              @PathVariable("id_weight") Long idWeighting,
-                                             @PathVariable("dt_update") LocalDateTime dtUpdate,
-                                             @RequestBody Weighting weighting) {
-        try {
-            weightingService.update(weighting, idWeighting, dtUpdate);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (OptimisticLockException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+                                             @PathVariable("dt_update") Long dtUpdate,
+                                             @RequestBody WeightingDto weightingDto) {
+
+        if (profileCheck.checkProfile(idProfile)){
+            try {
+                LocalDateTime dtUpdateTime = timeConversion.conversionTime(dtUpdate);
+                weightingDto.setProfile(profileService.get(idProfile));
+                weightingService.update(weightingDto, idWeighting, dtUpdateTime);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (OptimisticLockException ex) {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 
     @DeleteMapping("/{id_profile}/journal/weight/{id_weight}/dt_update/{dt_update}")
     public ResponseEntity<?> deleteWeighting(@PathVariable("id_profile") Long idProfile,
                                              @PathVariable("id_weight") Long idWeighting,
-                                             @PathVariable("dt_update") LocalDateTime dtUpdate) {
-        try {
-            weightingService.delete(idWeighting, dtUpdate);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException ex) {
-            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+                                             @PathVariable("dt_update") Long dtUpdate) {
+
+        if (profileCheck.checkProfile(idProfile)){
+            try {
+                LocalDateTime dtUpdateTime = timeConversion.conversionTime(dtUpdate);
+                weightingService.delete(idWeighting, dtUpdateTime);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (IllegalArgumentException ex) {
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            }
+        }else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 }

@@ -1,6 +1,6 @@
 package by.it_academy.jd2.my_application.config;
 
-import by.it_academy.jd2.my_application.filters.JWTAuthorizationFilter;
+import by.it_academy.jd2.my_application.filters.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,15 +11,31 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/user").permitAll()
-                .anyRequest().authenticated();
+    private final JwtFilter jwtFilter ;
+
+    WebSecurityConfig(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
     }
 
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .httpBasic().disable()
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET,"/api/product/**","/api/recipe/**","/api/profile/**")
+                .hasAnyRole("ADMIN","USER")
+                .antMatchers(HttpMethod.POST,"/api/product/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/product/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/product/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/recipe/**").hasAnyRole("ADMIN","USER")
+                .antMatchers(HttpMethod.PUT,"/api/recipe/**").hasAnyRole("ADMIN","USER")
+                .antMatchers(HttpMethod.DELETE,"/api/recipe/**").hasAnyRole("ADMIN","USER")
+                .antMatchers("/register", "/auth").anonymous()
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

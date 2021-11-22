@@ -20,6 +20,9 @@ public class Active {
     @OneToOne
     private Profile profile;
 
+    @OneToOne
+    private User creator;
+
     @Column(name = "creation_time")
     private LocalDateTime creationDate;
 
@@ -71,5 +74,13 @@ public class Active {
 
     public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }

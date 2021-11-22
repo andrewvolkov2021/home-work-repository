@@ -15,5 +15,4 @@ public interface IJournalDao extends JpaRepository<Journal, Long> {
     List<Journal> findAllByCreationDateBetweenAndProfileId(LocalDateTime start, LocalDateTime end, Long id);
 
     List<Journal> findAllByProfileId(long id);
-
 }

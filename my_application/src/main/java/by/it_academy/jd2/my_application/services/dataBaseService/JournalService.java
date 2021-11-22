@@ -2,6 +2,7 @@ package by.it_academy.jd2.my_application.services.dataBaseService;
 
 import by.it_academy.jd2.my_application.dao.api.IJournalDao;
 import by.it_academy.jd2.my_application.dto.JournalByDateDto;
+import by.it_academy.jd2.my_application.dto.JournalDto;
 import by.it_academy.jd2.my_application.models.Journal;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IJournalService;
 import by.it_academy.jd2.my_application.services.calculations.api.IJournalByDayService;
@@ -25,7 +26,14 @@ public class JournalService implements IJournalService {
     }
 
     @Override
-    public void save(Journal journal) throws IllegalArgumentException {
+    public void save(JournalDto journalDto) {
+        Journal journal = new Journal();
+        journal.setDish(journalDto.getDish());
+        journal.setProduct(journalDto.getProduct());
+        journal.setEating(journalDto.getEating());
+        journal.setProfile(journalDto.getProfile());
+        journal.setMeasure(journalDto.getMeasure());
+
         LocalDateTime creationDate = LocalDateTime.now();
         journal.setCreationDate(creationDate);
         journal.setUpdateDate(creationDate);
@@ -38,18 +46,18 @@ public class JournalService implements IJournalService {
     }
 
     @Override
-    public Page<Journal> getAllByProfileId(Pageable pageable, long profileId) {
+    public Page<Journal> getAllByProfileId(Pageable pageable, Long profileId) {
         return journalDao.findByProfileId(profileId, pageable);
     }
 
     @Override
-    public JournalByDateDto findAllByProfileIdAndCreationDate(LocalDateTime start, LocalDateTime end, long id) {
+    public JournalByDateDto findAllByProfileIdAndCreationDate(LocalDateTime start, LocalDateTime end, Long id) {
         List<Journal> journals = journalDao.findAllByCreationDateBetweenAndProfileId(start, end, id);
         return journalByDayService.getJournalByDay(journals);
     }
 
     @Override
-    public List<Journal> findAllByProfile(long id) {
+    public List<Journal> findAllByProfile(Long id) {
         return journalDao.findAllByProfileId(id);
     }
 
@@ -59,18 +67,17 @@ public class JournalService implements IJournalService {
     }
 
     @Override
-    public void update(Journal journal, Long id, LocalDateTime dt_update) throws OptimisticLockException {
+    public void update(JournalDto journalDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Journal updatedJournal = get(id);
-        if (dt_update != updatedJournal.getUpdateDate()) {
+        if (dtUpdate != updatedJournal.getUpdateDate()) {
             throw new OptimisticLockException("Невозможно выполнить обновление, так как дневник " +
                     "приема пищи был изменен");
         } else {
-            updatedJournal.setEating(journal.getEating());
-            updatedJournal.setProfile(journal.getProfile());
-            updatedJournal.setProduct(journal.getProduct());
-            updatedJournal.setDish(journal.getDish());
-            updatedJournal.setMeasure(journal.getMeasure());
-            updatedJournal.setCreationDate(journal.getCreationDate());
+            updatedJournal.setEating(journalDto.getEating());
+            updatedJournal.setProfile(journalDto.getProfile());
+            updatedJournal.setProduct(journalDto.getProduct());
+            updatedJournal.setDish(journalDto.getDish());
+            updatedJournal.setMeasure(journalDto.getMeasure());
 
             LocalDateTime updateDate = LocalDateTime.now();
             updatedJournal.setUpdateDate(updateDate);
@@ -80,9 +87,9 @@ public class JournalService implements IJournalService {
     }
 
     @Override
-    public void delete(Long id, LocalDateTime dt_update) throws OptimisticLockException {
+    public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Journal updatedJournal = get(id);
-        if (dt_update != updatedJournal.getUpdateDate()) {
+        if (dtUpdate != updatedJournal.getUpdateDate()) {
             throw new OptimisticLockException("Невозможно выполнить удаление, так как дневник " +
                     "приема пищи был изменен");
         } else {
