@@ -28,14 +28,14 @@ public class ProductService implements IProductService {
         Product product = new Product();
         product.setCreator(userHolder.getUser());
         product.setName(productDto.getName());
-        product.setBrand(product.getBrand());
+        product.setBrand(productDto.getBrand());
         product.setCalories(productDto.getCalories());
-        product.setProteins(productDto.getProtein());
-        product.setCarbohydrates(product.getCarbohydrates());
-        product.setFats(product.getFats());
+        product.setProteins(productDto.getProteins());
+        product.setCarbohydrates(productDto.getCarbohydrates());
+        product.setFats(productDto.getFats());
         product.setMeasure(productDto.getMeasure());
 
-        LocalDateTime creationDate = LocalDateTime.now();
+        LocalDateTime creationDate = LocalDateTime.now().withNano(0);
         product.setCreationDate(creationDate);
         product.setUpdateDate(creationDate);
         productDao.save(product);
@@ -60,20 +60,20 @@ public class ProductService implements IProductService {
     public void update(ProductDto productDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
 
         Product updatedProduct = get(id);
-        if (dtUpdate != updatedProduct.getUpdateDate()) {
+        if (!updatedProduct.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Обновление не может быть выполнено, так как" +
                     " обновляемый продукт был изменен");
         } else {
             updatedProduct.setName(productDto.getName());
             updatedProduct.setBrand(productDto.getBrand());
             updatedProduct.setCalories(productDto.getCalories());
-            updatedProduct.setProteins(productDto.getProtein());
+            updatedProduct.setProteins(productDto.getProteins());
             updatedProduct.setFats(productDto.getFats());
-            updatedProduct.setCarbohydrates(productDto.getCarbonates());
+            updatedProduct.setCarbohydrates(productDto.getCarbohydrates());
             updatedProduct.setMeasure(productDto.getMeasure());
             updatedProduct.setCreator(userHolder.getUser());
 
-            LocalDateTime updateDate = LocalDateTime.now();
+            LocalDateTime updateDate = LocalDateTime.now().withNano(0);
             updatedProduct.setUpdateDate(updateDate);
 
             productDao.save(updatedProduct);
@@ -83,7 +83,7 @@ public class ProductService implements IProductService {
     @Override
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Product deletedProduct = get(id);
-        if (dtUpdate != deletedProduct.getUpdateDate()) {
+        if (deletedProduct.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Удаление не может быть выполнено, так как удаляемый " +
                     "продукт был изменен");
         } else {

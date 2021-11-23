@@ -71,7 +71,7 @@ public class DishRestController {
             dishService.update(dishDto, id, dtUpdateTime);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (OptimisticLockException ex) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -85,7 +85,7 @@ public class DishRestController {
             dishService.delete(id, dtUpdateTime);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (OptimisticLockException ex) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

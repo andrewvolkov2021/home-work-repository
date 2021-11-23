@@ -4,7 +4,9 @@ import by.it_academy.jd2.my_application.models.User;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IUserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserHolder {
     private final IUserService userService;
 

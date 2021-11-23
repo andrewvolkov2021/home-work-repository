@@ -34,7 +34,7 @@ public class JournalService implements IJournalService {
         journal.setProfile(journalDto.getProfile());
         journal.setMeasure(journalDto.getMeasure());
 
-        LocalDateTime creationDate = LocalDateTime.now();
+        LocalDateTime creationDate = LocalDateTime.now().withNano(0);
         journal.setCreationDate(creationDate);
         journal.setUpdateDate(creationDate);
         journalDao.save(journal);
@@ -69,7 +69,7 @@ public class JournalService implements IJournalService {
     @Override
     public void update(JournalDto journalDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Journal updatedJournal = get(id);
-        if (dtUpdate != updatedJournal.getUpdateDate()) {
+        if (updatedJournal.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Невозможно выполнить обновление, так как дневник " +
                     "приема пищи был изменен");
         } else {
@@ -88,8 +88,8 @@ public class JournalService implements IJournalService {
 
     @Override
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
-        Journal updatedJournal = get(id);
-        if (dtUpdate != updatedJournal.getUpdateDate()) {
+        Journal deletedJournal = get(id);
+        if (deletedJournal.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Невозможно выполнить удаление, так как дневник " +
                     "приема пищи был изменен");
         } else {

@@ -72,7 +72,7 @@ public class ProductRestController {
             productService.update(productDto, id, dtUpdateTime);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (OptimisticLockException ex) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -86,7 +86,7 @@ public class ProductRestController {
             productService.delete(id, dtUpdateTime);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (OptimisticLockException ex) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }

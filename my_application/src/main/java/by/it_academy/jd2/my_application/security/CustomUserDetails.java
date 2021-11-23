@@ -4,10 +4,12 @@ import by.it_academy.jd2.my_application.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Collections;
 
+@Component
 public class CustomUserDetails implements UserDetails {
 
     private String login;

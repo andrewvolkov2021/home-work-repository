@@ -42,9 +42,11 @@ public class Profile {
     private double targetWeight;
 
     @Column(name = "creation_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime creationDate;
 
     @Column(name = "update_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updateDate;
 
     public Profile() {

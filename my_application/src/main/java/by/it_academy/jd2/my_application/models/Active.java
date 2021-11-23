@@ -1,5 +1,7 @@
 package by.it_academy.jd2.my_application.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -24,9 +26,11 @@ public class Active {
     private User creator;
 
     @Column(name = "creation_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime creationDate;
 
     @Column(name = "update_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updateDate;
 
     public Active() {

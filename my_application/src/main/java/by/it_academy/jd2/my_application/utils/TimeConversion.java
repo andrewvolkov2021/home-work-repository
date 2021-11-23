@@ -10,9 +10,9 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class TimeConversion {
 
-    public LocalDateTime conversionTime(Long microseconds) {
-        Instant instant = Instant.EPOCH.plus(microseconds, ChronoUnit.MICROS);
-        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    public LocalDateTime conversionTime(Long dateUpdate) {
+        LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(dateUpdate), ZoneId.systemDefault());
+        return date;
     }
 }
 

@@ -104,7 +104,7 @@ public class WeightingRestController {
                 weightingService.update(weightingDto, idWeighting, dtUpdateTime);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (OptimisticLockException ex) {
-                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
             }
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -122,9 +122,9 @@ public class WeightingRestController {
                 weightingService.delete(idWeighting, dtUpdateTime);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (IllegalArgumentException ex) {
-                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
             }
-        }else {
+        } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }

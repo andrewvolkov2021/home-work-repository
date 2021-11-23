@@ -31,7 +31,7 @@ public class WeightingService implements IWeightingService {
         weighting.setProfile(weightingDto.getProfile());
         weighting.setWeight(weightingDto.getWeight());
 
-        LocalDateTime creationDate = LocalDateTime.now();
+        LocalDateTime creationDate = LocalDateTime.now().withNano(0);
         weighting.setCreationDate(creationDate);
         weighting.setUpdateDate(creationDate);
         weightingDao.save(weighting);
@@ -51,7 +51,7 @@ public class WeightingService implements IWeightingService {
     public void update(WeightingDto weightingDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Weighting updatedWeighting = get(id);
 
-        if (dtUpdate != updatedWeighting.getUpdateDate()) {
+        if (updatedWeighting.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Обновление не может быть выполнено, так как" +
                     " обновляемое взвешивание было изменено");
         } else {
@@ -71,7 +71,7 @@ public class WeightingService implements IWeightingService {
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Weighting deletedWeighting = get(id);
 
-        if (dtUpdate != deletedWeighting.getUpdateDate()) {
+        if (deletedWeighting.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Удаление не может быть выполнено, так как" +
                     " удаляемое взвешивание было изменено");
         } else {

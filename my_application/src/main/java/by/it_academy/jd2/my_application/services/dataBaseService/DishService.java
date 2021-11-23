@@ -66,7 +66,7 @@ public class DishService implements IDishService {
     @Override
     public void update(DishDto dishDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException{
         Dish updatedDish = get(id);
-        if (dtUpdate != updatedDish.getUpdateDate()) {
+        if (updatedDish.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Невозможно выполнить обновление, так как обновляемое блюдо было изменено");
         } else {
 
@@ -75,7 +75,7 @@ public class DishService implements IDishService {
             updatedDish.setCreator(userHolder.getUser());
             updatedDish.setComponents(dishDto.getComponents());
 
-            LocalDateTime updateDate = LocalDateTime.now();
+            LocalDateTime updateDate = LocalDateTime.now().withNano(0);
             updatedDish.setUpdateDate(updateDate);
 
             dishDao.save(updatedDish);
@@ -85,7 +85,7 @@ public class DishService implements IDishService {
     @Override
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Dish deletedDish = get(id);
-        if (dtUpdate != deletedDish.getUpdateDate()) {
+        if (deletedDish.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Невозможно выполнить удаление, так как удаляемое блюдо было изменено");
         } else {
             dishDao.deleteById(id);

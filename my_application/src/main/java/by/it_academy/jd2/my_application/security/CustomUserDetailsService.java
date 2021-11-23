@@ -5,7 +5,9 @@ import by.it_academy.jd2.my_application.services.dataBaseService.api.IUserServic
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final IUserService userService;

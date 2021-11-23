@@ -31,6 +31,6 @@ public class AuthController {
     public String authUser(@RequestBody LoginDto loginDto) {
         User userEntity = userService.findByLoginAndPassword(loginDto.getLogin(), loginDto.getPassword());
         String token =jwtProvider.generateToken(userEntity.getLogin());
-        return token;
+        return "Bearer " + token;
     }
 }

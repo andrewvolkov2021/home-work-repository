@@ -1,6 +1,7 @@
 package by.it_academy.jd2.my_application.models;
 
 import by.it_academy.jd2.my_application.models.api.EEating;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -29,9 +30,11 @@ public class Journal {
     private double measure;
 
     @Column(name = "creation_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime creationDate;
 
     @Column(name = "update_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updateDate;
 
     public Journal() {

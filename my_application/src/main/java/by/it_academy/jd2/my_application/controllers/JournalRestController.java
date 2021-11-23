@@ -122,7 +122,7 @@ public class JournalRestController {
                 journalService.update(journalDto, idFood, dtUpdateTime);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (OptimisticLockException ex) {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
+                return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
             } catch (IllegalArgumentException e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
             }
@@ -142,7 +142,7 @@ public class JournalRestController {
                 journalService.delete(id, dtUpdateTime);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (OptimisticLockException ex) {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
+                return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
             } catch (IllegalArgumentException e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
             }

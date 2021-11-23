@@ -5,9 +5,9 @@ public class ProductDto {
     private String name;
     private String brand;
     private double calories;
-    private double protein;
+    private double proteins;
     private double fats;
-    private double carbonates;
+    private double carbohydrates;
     private double measure;
 
     public String getName() {
@@ -34,12 +34,12 @@ public class ProductDto {
         this.calories = calories;
     }
 
-    public double getProtein() {
-        return protein;
+    public double getProteins() {
+        return proteins;
     }
 
-    public void setProtein(double protein) {
-        this.protein = protein;
+    public void setProteins(double protein) {
+        this.proteins = protein;
     }
 
     public double getFats() {
@@ -50,12 +50,12 @@ public class ProductDto {
         this.fats = fats;
     }
 
-    public double getCarbonates() {
-        return carbonates;
+    public double getCarbohydrates() {
+        return carbohydrates;
     }
 
-    public void setCarbonates(double carbonates) {
-        this.carbonates = carbonates;
+    public void setCarbohydrates(double carbohydrates) {
+        this.carbohydrates = carbohydrates;
     }
 
     public double getMeasure() {

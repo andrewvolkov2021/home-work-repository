@@ -35,7 +35,7 @@ public class ActiveService implements IActiveService {
         active.setProfile(activeDto.getProfile());
         active.setCalories(activeDto.getCalories());
 
-        LocalDateTime creationDate = LocalDateTime.now();
+        LocalDateTime creationDate = LocalDateTime.now().withNano(0);
         active.setCreationDate(creationDate);
         active.setUpdateDate(creationDate);
         activeDao.save(active);
@@ -58,7 +58,7 @@ public class ActiveService implements IActiveService {
     public void update(ActiveDto activeDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Active updatedActive = get(id);
 
-        if (dtUpdate != updatedActive.getUpdateDate()) {
+        if (updatedActive.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Обновление не может быть выполнено, так как" +
                     " обновляемая активность была изменена");
         } else {
@@ -77,7 +77,7 @@ public class ActiveService implements IActiveService {
     @Override
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Active deletedActive = get(id);
-        if (dtUpdate != deletedActive.getUpdateDate()) {
+        if (deletedActive.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Удаление не может быть выполнено, так как удаляемая " +
                     "активность была изменена");
         } else {

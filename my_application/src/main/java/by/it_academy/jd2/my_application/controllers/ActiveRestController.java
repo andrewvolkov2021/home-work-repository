@@ -103,7 +103,7 @@ public class ActiveRestController {
                 activeService.update(activeDto, idActive, dtUpdateTime);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (OptimisticLockException ex) {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
+                return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
             }
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -121,7 +121,7 @@ public class ActiveRestController {
                 activeService.delete(idActive, dtUpdateTime);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (OptimisticLockException ex) {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
+                return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
             }
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);

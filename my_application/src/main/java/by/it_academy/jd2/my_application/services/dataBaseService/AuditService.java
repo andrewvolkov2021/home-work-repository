@@ -20,7 +20,7 @@ public class AuditService implements IAuditGeneralService {
 
     @Override
     public void save(Audit audit) {
-        LocalDateTime creationDate = LocalDateTime.now();
+        LocalDateTime creationDate = LocalDateTime.now().withNano(0);
         audit.setCreationDate(creationDate);
         auditDao.save(audit);
     }

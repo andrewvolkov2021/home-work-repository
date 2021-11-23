@@ -1,6 +1,7 @@
 package by.it_academy.jd2.my_application.models;
 
 import by.it_academy.jd2.my_application.models.api.ETypeOfEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class Audit {
     private long entityId;
 
     @Column(name = "creation_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime creationDate;
 
     public Audit() {
