@@ -12,12 +12,9 @@ import java.time.temporal.ChronoField;
 @Service
 public class TimeService implements ITimeService {
 
-    private static final long MILLISECOND_IN_DAY = 86400000;
-
     @Override
-    public LocalDateTime getDate(int day) {
-        long dayInMilliseconds = day * MILLISECOND_IN_DAY;
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(dayInMilliseconds), ZoneId.systemDefault());
+    public LocalDateTime getDate(long day) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(day), ZoneId.systemDefault());
     }
 
     @Override

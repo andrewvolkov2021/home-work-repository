@@ -75,7 +75,7 @@ public class WeightingService implements IWeightingService {
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Weighting deletedWeighting = get(id);
 
-        if (deletedWeighting.getUpdateDate().isEqual(dtUpdate)) {
+        if (!deletedWeighting.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Удаление не может быть выполнено, так как" +
                     " удаляемое взвешивание было изменено");
         } else {

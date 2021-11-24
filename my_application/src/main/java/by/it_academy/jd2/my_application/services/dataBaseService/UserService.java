@@ -63,7 +63,7 @@ public class UserService implements IUserService {
     @Override
     public void update(User user, Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         User updatedUser = get(id);
-        if (dtUpdate != updatedUser.getUpdateDate()) {
+        if (!updatedUser.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Обновление не может быть выполнено, так как " +
                     "обновляемый пользователь был изменен");
         } else {
@@ -85,7 +85,7 @@ public class UserService implements IUserService {
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         User deletedUser = get(id);
         Profile profile = profileService.findByUser(deletedUser);
-        if (dtUpdate != deletedUser.getUpdateDate()) {
+        if (!deletedUser.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Удадение не может быть выполнено, така как " +
                     "удаляемый пользователь был изменен");
         } else {

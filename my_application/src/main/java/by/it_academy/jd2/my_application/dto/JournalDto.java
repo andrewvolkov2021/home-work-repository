@@ -7,19 +7,10 @@ import by.it_academy.jd2.my_application.models.api.EEating;
 
 public class JournalDto {
 
-    private Profile profile;
     private Dish dish;
     private Product product;
     private double measure;
     private EEating eating;
-
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
 
     public Dish getDish() {
         return dish;

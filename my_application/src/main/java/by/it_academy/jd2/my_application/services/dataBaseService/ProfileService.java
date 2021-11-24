@@ -48,12 +48,8 @@ public class ProfileService implements IProfileService {
     @Override
     public void update(ProfileDto profileDto, Long id, LocalDateTime dtUpdate) throws IllegalArgumentException {
         Profile updatedProfile = get(id);
-        LocalDateTime updateTime = updatedProfile.getUpdateDate();
-        DateTimeFormatter dtf = DateTimeFormatter.ISO_DATE_TIME;
-        updateTime.truncatedTo(ChronoUnit.SECONDS).format(dtf);
 
-
-        if (!updateTime.isEqual(dtUpdate)) {
+        if (!updatedProfile.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Обновление не может быть выполнено, так как" +
                     " обновляемый профиль был изменен");
         } else {
@@ -78,7 +74,7 @@ public class ProfileService implements IProfileService {
     public void delete(Long id, LocalDateTime dtUpdate) throws IllegalArgumentException {
         Profile deletedProfile = get(id);
 
-        if (dtUpdate != deletedProfile.getUpdateDate()) {
+        if (!deletedProfile.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Удаление не может быть выполнено, так как" +
                     " удаляемый профиль был изменен");
         } else {

@@ -59,7 +59,7 @@ public class ActiveService implements IActiveService {
     public void update(ActiveDto activeDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Active updatedActive = get(id);
 
-        if (updatedActive.getUpdateDate().isEqual(dtUpdate)) {
+        if (!updatedActive.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Обновление не может быть выполнено, так как" +
                     " обновляемая активность была изменена");
         } else {
@@ -78,7 +78,7 @@ public class ActiveService implements IActiveService {
     @Override
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Active deletedActive = get(id);
-        if (deletedActive.getUpdateDate().isEqual(dtUpdate)) {
+        if (!deletedActive.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Удаление не может быть выполнено, так как удаляемая " +
                     "активность была изменена");
         } else {

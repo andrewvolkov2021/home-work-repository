@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IProductDao extends JpaRepository<Product, Long> {
     Page<Product> findProductsByNameContains(String name, Pageable pageable);
-
 }

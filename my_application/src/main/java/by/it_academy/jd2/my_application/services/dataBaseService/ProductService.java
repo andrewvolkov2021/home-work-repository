@@ -84,7 +84,7 @@ public class ProductService implements IProductService {
     @Override
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Product deletedProduct = get(id);
-        if (deletedProduct.getUpdateDate().isEqual(dtUpdate)) {
+        if (!deletedProduct.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Удаление не может быть выполнено, так как удаляемый " +
                     "продукт был изменен");
         } else {

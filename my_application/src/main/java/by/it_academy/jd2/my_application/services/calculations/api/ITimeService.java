@@ -3,7 +3,7 @@ package by.it_academy.jd2.my_application.services.calculations.api;
 import java.time.LocalDateTime;
 
 public interface ITimeService {
-    LocalDateTime getDate(int day);
+    LocalDateTime getDate(long day);
 
     LocalDateTime getEndOfDate(LocalDateTime date);
 

@@ -6,6 +6,7 @@ import by.it_academy.jd2.my_application.dto.JournalDto;
 import by.it_academy.jd2.my_application.models.Journal;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IJournalService;
 import by.it_academy.jd2.my_application.services.calculations.api.IJournalByDayService;
+import by.it_academy.jd2.my_application.services.dataBaseService.api.IProfileService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,19 +20,22 @@ public class JournalService implements IJournalService {
 
     private final IJournalDao journalDao;
     private final IJournalByDayService journalByDayService;
+    private final IProfileService profileService;
 
-    public JournalService(IJournalDao journalDao, IJournalByDayService journalByDayService) {
+    public JournalService(IJournalDao journalDao, IJournalByDayService journalByDayService,
+                          IProfileService profileService) {
         this.journalDao = journalDao;
         this.journalByDayService = journalByDayService;
+        this.profileService = profileService;
     }
 
     @Override
-    public Journal save(JournalDto journalDto) {
+    public Journal save(JournalDto journalDto, Long idProfile) {
         Journal journal = new Journal();
         journal.setDish(journalDto.getDish());
         journal.setProduct(journalDto.getProduct());
         journal.setEating(journalDto.getEating());
-        journal.setProfile(journalDto.getProfile());
+        journal.setProfile(profileService.get(idProfile));
         journal.setMeasure(journalDto.getMeasure());
 
         LocalDateTime creationDate = LocalDateTime.now().withNano(0);
@@ -68,14 +72,15 @@ public class JournalService implements IJournalService {
     }
 
     @Override
-    public void update(JournalDto journalDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
+    public void update(JournalDto journalDto, Long id, LocalDateTime dtUpdate,
+                       Long idProfile) throws OptimisticLockException {
         Journal updatedJournal = get(id);
-        if (updatedJournal.getUpdateDate().isEqual(dtUpdate)) {
+        if (!updatedJournal.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Невозможно выполнить обновление, так как дневник " +
                     "приема пищи был изменен");
         } else {
             updatedJournal.setEating(journalDto.getEating());
-            updatedJournal.setProfile(journalDto.getProfile());
+            updatedJournal.setProfile(profileService.get(idProfile));
             updatedJournal.setProduct(journalDto.getProduct());
             updatedJournal.setDish(journalDto.getDish());
             updatedJournal.setMeasure(journalDto.getMeasure());
@@ -90,7 +95,7 @@ public class JournalService implements IJournalService {
     @Override
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Journal deletedJournal = get(id);
-        if (deletedJournal.getUpdateDate().isEqual(dtUpdate)) {
+        if (!deletedJournal.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Невозможно выполнить удаление, так как дневник " +
                     "приема пищи был изменен");
         } else {

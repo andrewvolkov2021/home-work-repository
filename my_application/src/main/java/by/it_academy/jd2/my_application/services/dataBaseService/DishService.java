@@ -43,8 +43,8 @@ public class DishService implements IDishService {
             component.setCreationDate(creationDate);
             component.setUpdateDate(creationDate);
             componentDao.save(component);
-            return dish;
         }
+        dish.setComponents(components);
         dishDao.save(dish);
         return dish;
     }
@@ -67,14 +67,21 @@ public class DishService implements IDishService {
     @Override
     public void update(DishDto dishDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException{
         Dish updatedDish = get(id);
-        if (updatedDish.getUpdateDate().isEqual(dtUpdate)) {
+        if (!updatedDish.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Невозможно выполнить обновление, так как обновляемое блюдо было изменено");
         } else {
 
             updatedDish.setName(dishDto.getName());
+
+            List<Component> components = dishDto.getComponents();
+            for (Component component : components) {
+                component.setCreationDate(dtUpdate);
+                component.setUpdateDate(dtUpdate);
+                componentDao.save(component);
+            }
+
             updatedDish.setComponents(dishDto.getComponents());
             updatedDish.setCreator(userHolder.getUser());
-            updatedDish.setComponents(dishDto.getComponents());
 
             LocalDateTime updateDate = LocalDateTime.now().withNano(0);
             updatedDish.setUpdateDate(updateDate);
@@ -86,7 +93,7 @@ public class DishService implements IDishService {
     @Override
     public void delete(Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
         Dish deletedDish = get(id);
-        if (deletedDish.getUpdateDate().isEqual(dtUpdate)) {
+        if (!deletedDish.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Невозможно выполнить удаление, так как удаляемое блюдо было изменено");
         } else {
             dishDao.deleteById(id);

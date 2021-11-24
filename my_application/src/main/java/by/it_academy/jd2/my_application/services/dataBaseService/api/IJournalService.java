@@ -17,13 +17,13 @@ public interface IJournalService {
 
     List<Journal> findAllByProfile(Long id);
 
-    Journal save(JournalDto journalDto);
+    Journal save(JournalDto journalDto, Long idProfile);
 
     Page<Journal> getAll (Pageable pageable);
 
     Journal get(Long id);
 
-    void update(JournalDto journalDto, Long id, LocalDateTime dtUpdate);
+    void update(JournalDto journalDto, Long id, LocalDateTime dtUpdate, Long idProfile);
 
     void delete (Long id, LocalDateTime dtUpdate);
 }

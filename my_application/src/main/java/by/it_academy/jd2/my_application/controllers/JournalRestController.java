@@ -24,15 +24,13 @@ import java.time.LocalDateTime;
 public class JournalRestController {
 
     private final IJournalService journalService;
-    private final ProfileService profileService;
     private final ITimeService timeService;
     private final TimeConversion timeConversion;
     private final ProfileCheck profileCheck;
 
-    public JournalRestController(IJournalService journalService, ProfileService profileService,
-                                 ITimeService timeService, TimeConversion timeConversion, ProfileCheck profileCheck) {
+    public JournalRestController(IJournalService journalService, ITimeService timeService,
+                                 TimeConversion timeConversion, ProfileCheck profileCheck) {
         this.journalService = journalService;
-        this.profileService = profileService;
         this.timeService = timeService;
         this.timeConversion = timeConversion;
         this.profileCheck = profileCheck;
@@ -58,12 +56,13 @@ public class JournalRestController {
 
     @GetMapping(value = "/{id_profile}/journal/food/byDay/{day}")
     public ResponseEntity<?> getJournalsPerDay(@PathVariable("id_profile") long idProfile,
-                                                           @PathVariable("day") int day){
+                                                           @PathVariable("day") long day){
         if (profileCheck.checkProfile(idProfile)){
             try {
                 LocalDateTime date = timeService.getDate(day);
-                LocalDateTime startOfDate = timeService.detStartOfDate(date);
-                LocalDateTime endOfDate = timeService.getEndOfDate(startOfDate);
+                LocalDateTime endOfDate = timeService.getEndOfDate(date);
+                LocalDateTime startOfDate = timeService.detStartOfDate(endOfDate);
+
 
                 JournalByDateDto journalByDay = journalService
                         .findAllByProfileIdAndCreationDate(startOfDate, endOfDate, idProfile);
@@ -98,8 +97,7 @@ public class JournalRestController {
 
         if (profileCheck.checkProfile(idProfile)) {
             try {
-                journalDto.setProfile(profileService.get(idProfile));
-                journalService.save(journalDto);
+                journalService.save(journalDto, idProfile);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             } catch (IllegalArgumentException ex) {
                 return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -118,8 +116,7 @@ public class JournalRestController {
         if (profileCheck.checkProfile(idProfile)){
             try {
                 LocalDateTime dtUpdateTime = timeConversion.conversionTime(dtUpdate);
-                journalDto.setProfile(profileService.get(idProfile));
-                journalService.update(journalDto, idFood, dtUpdateTime);
+                journalService.update(journalDto, idFood, dtUpdateTime, idProfile);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (OptimisticLockException ex) {
                 return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
@@ -146,7 +143,7 @@ public class JournalRestController {
             } catch (IllegalArgumentException e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
             }
-        }else {
+        } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }

@@ -36,6 +36,7 @@ public class Component {
     public long getId() {
         return id;
     }
+
     public Product getProduct() {
         return product;
     }
