@@ -28,7 +28,7 @@ public class ActiveService implements IActiveService {
     }
 
     @Override
-    public void save(ActiveDto activeDto) {
+    public Active save(ActiveDto activeDto) {
         Active active = new Active();
         active.setCreator(userHolder.getUser());
         active.setName(activeDto.getName());
@@ -39,6 +39,7 @@ public class ActiveService implements IActiveService {
         active.setCreationDate(creationDate);
         active.setUpdateDate(creationDate);
         activeDao.save(active);
+        return active;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class ActiveService implements IActiveService {
             updatedActive.setCalories(activeDto.getCalories());
             updatedActive.setProfile(activeDto.getProfile());
 
-            LocalDateTime updateDate = LocalDateTime.now();
+            LocalDateTime updateDate = LocalDateTime.now().withNano(0);
             updatedActive.setUpdateDate(updateDate);
 
             activeDao.save(updatedActive);

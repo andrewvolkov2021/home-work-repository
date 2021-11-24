@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public interface IProfileService {
 
-    void save(Profile profile);
+    Profile save(Profile profile);
 
     Page<Profile> getAll(Pageable pageable);
 

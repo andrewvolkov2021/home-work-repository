@@ -5,6 +5,7 @@ import by.it_academy.jd2.my_application.dto.WeightingByDateDto;
 import by.it_academy.jd2.my_application.dto.WeightingDto;
 import by.it_academy.jd2.my_application.models.Weighting;
 import by.it_academy.jd2.my_application.security.UserHolder;
+import by.it_academy.jd2.my_application.services.dataBaseService.api.IProfileService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IWeightingService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,23 +19,26 @@ public class WeightingService implements IWeightingService {
 
     private final IWeighingDao weightingDao;
     private final UserHolder userHolder;
+    private final IProfileService profileService;
 
-    public WeightingService(IWeighingDao weightingDao, UserHolder userHolder) {
+    public WeightingService(IWeighingDao weightingDao, UserHolder userHolder, IProfileService profileService) {
         this.weightingDao = weightingDao;
         this.userHolder = userHolder;
+        this.profileService = profileService;
     }
 
     @Override
-    public void save(WeightingDto weightingDto){
+    public Weighting save(Long id, WeightingDto weightingDto){
         Weighting weighting = new Weighting();
         weighting.setCreator(userHolder.getUser());
-        weighting.setProfile(weightingDto.getProfile());
+        weighting.setProfile(profileService.get(id));
         weighting.setWeight(weightingDto.getWeight());
 
         LocalDateTime creationDate = LocalDateTime.now().withNano(0);
         weighting.setCreationDate(creationDate);
         weighting.setUpdateDate(creationDate);
         weightingDao.save(weighting);
+        return weighting;
     }
 
     @Override
@@ -48,19 +52,19 @@ public class WeightingService implements IWeightingService {
     }
 
     @Override
-    public void update(WeightingDto weightingDto, Long id, LocalDateTime dtUpdate) throws OptimisticLockException {
+    public void update(WeightingDto weightingDto, Long id, Long idProfile, LocalDateTime dtUpdate) throws OptimisticLockException {
         Weighting updatedWeighting = get(id);
 
-        if (updatedWeighting.getUpdateDate().isEqual(dtUpdate)) {
+        if (!updatedWeighting.getUpdateDate().isEqual(dtUpdate)) {
             throw new OptimisticLockException("Обновление не может быть выполнено, так как" +
                     " обновляемое взвешивание было изменено");
         } else {
 
-            updatedWeighting.setProfile(weightingDto.getProfile());
+            updatedWeighting.setProfile(profileService.get(idProfile));
             updatedWeighting.setWeight(weightingDto.getWeight());
             updatedWeighting.setCreator(userHolder.getUser());
 
-            LocalDateTime updateDate = LocalDateTime.now();
+            LocalDateTime updateDate = LocalDateTime.now().withNano(0);
             updatedWeighting.setUpdateDate(updateDate);
 
             weightingDao.save(updatedWeighting);

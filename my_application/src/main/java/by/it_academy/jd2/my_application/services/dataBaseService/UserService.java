@@ -74,7 +74,7 @@ public class UserService implements IUserService {
             updatedUser.setStatus(user.getStatus());
             updatedUser.setCreationDate(user.getCreationDate());
 
-            LocalDateTime updateDate = LocalDateTime.now();
+            LocalDateTime updateDate = LocalDateTime.now().withNano(0);
             updatedUser.setUpdateDate(updateDate);
 
             userDao.save(updatedUser);

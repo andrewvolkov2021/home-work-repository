@@ -29,12 +29,12 @@ public class DishService implements IDishService {
     }
 
     @Override
-    public void save(DishDto dishDto) {
+    public Dish save(DishDto dishDto) {
         Dish dish = new Dish();
         dish.setName(dishDto.getName());
         dish.setCreator(userHolder.getUser());
 
-        LocalDateTime creationDate = LocalDateTime.now();
+        LocalDateTime creationDate = LocalDateTime.now().withNano(0);
         dish.setCreationDate(creationDate);
         dish.setUpdateDate(creationDate);
 
@@ -43,9 +43,10 @@ public class DishService implements IDishService {
             component.setCreationDate(creationDate);
             component.setUpdateDate(creationDate);
             componentDao.save(component);
+            return dish;
         }
-
         dishDao.save(dish);
+        return dish;
     }
 
     @Override

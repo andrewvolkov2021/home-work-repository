@@ -26,7 +26,7 @@ public class JournalService implements IJournalService {
     }
 
     @Override
-    public void save(JournalDto journalDto) {
+    public Journal save(JournalDto journalDto) {
         Journal journal = new Journal();
         journal.setDish(journalDto.getDish());
         journal.setProduct(journalDto.getProduct());
@@ -38,6 +38,7 @@ public class JournalService implements IJournalService {
         journal.setCreationDate(creationDate);
         journal.setUpdateDate(creationDate);
         journalDao.save(journal);
+        return journal;
     }
 
     @Override
@@ -79,7 +80,7 @@ public class JournalService implements IJournalService {
             updatedJournal.setDish(journalDto.getDish());
             updatedJournal.setMeasure(journalDto.getMeasure());
 
-            LocalDateTime updateDate = LocalDateTime.now();
+            LocalDateTime updateDate = LocalDateTime.now().withNano(0);
             updatedJournal.setUpdateDate(updateDate);
 
             journalDao.save(updatedJournal);

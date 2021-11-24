@@ -5,13 +5,18 @@ import by.it_academy.jd2.my_application.models.User;
 import by.it_academy.jd2.my_application.models.Weighting;
 import by.it_academy.jd2.my_application.models.api.ETypeOfEntity;
 import by.it_academy.jd2.my_application.security.UserHolder;
-import by.it_academy.jd2.my_application.services.audit.api.IAuditService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IAuditGeneralService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IUserService;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Service;
 
-public class WeightingAuditService implements IAuditService {
+import java.time.LocalDateTime;
+
+@Aspect
+@Service
+public class WeightingAuditService{
 
     private final IAuditGeneralService auditGeneralService;
     private final UserHolder userHolder;
@@ -23,17 +28,15 @@ public class WeightingAuditService implements IAuditService {
         this.userService = userService;
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.WeightingService.save(..))")
-    public void save(JoinPoint joinPoint) {
+    @AfterReturning(pointcut = "execution(* by.it_academy.jd2.my_application.services.dataBaseService.WeightingService.save(..))", returning = "result")
+    public void methodSaveWeighting(JoinPoint joinPoint, Object result){
         try {
             Object[] args = joinPoint.getArgs();
-
-            Weighting weighting = (Weighting) args[0];
+            Weighting weighting = (Weighting) result;
 
             Audit audit = new Audit();
             audit.setCreationDate(weighting.getCreationDate());
-            audit.setText("Создано новое взвешиване " + weighting.getId());
+            audit.setText("Создан Weighting " + weighting.getId());
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
@@ -42,51 +45,48 @@ public class WeightingAuditService implements IAuditService {
             auditGeneralService.save(audit);
 
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.WeightingService.update(..))")
-    public void update(JoinPoint joinPoint) {
+    @AfterReturning("execution(* by.it_academy.jd2.my_application.services.dataBaseService.WeightingService.update(..))")
+    public void methodUpdateWeighting(JoinPoint joinPoint) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Weighting weighting = (Weighting) args[0];
+            Weighting arg = (Weighting) args[0];
 
             Audit audit = new Audit();
-            audit.setCreationDate(weighting.getCreationDate());
-            audit.setText("Изменено взвешиваие " + weighting.getId());
+            audit.setCreationDate(arg.getCreationDate());
+            audit.setText("Изменен Weighting " + arg.getId());
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
             audit.setTypeOfEntity(ETypeOfEntity.WEIGHTING);
-            audit.setEntityId(weighting.getId());
+            audit.setEntityId(arg.getId());
             auditGeneralService.save(audit);
+
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.WeightingService.delete(..))")
-    public void delete(JoinPoint joinPoint) {
+    @AfterReturning("execution(* by.it_academy.jd2.my_application.services.dataBaseService.WeightingService.delete(..))")
+    public void methodDeleteWeighting(JoinPoint joinPoint) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Weighting weighting = (Weighting) args[0];
-
+            Long id = (Long) args[0];
             Audit audit = new Audit();
-            audit.setCreationDate(weighting.getCreationDate());
-            audit.setText("Удалено взвешивание " + weighting.getId());
+            audit.setCreationDate(LocalDateTime.now().withNano(0));
+            audit.setText("Удален Weighting " + id);
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
             audit.setTypeOfEntity(ETypeOfEntity.WEIGHTING);
-            audit.setEntityId(weighting.getId());
+            audit.setEntityId(id);
             auditGeneralService.save(audit);
+
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 }

@@ -34,7 +34,7 @@ public class WeightingRestController {
         this.profileCheck = profileCheck;
     }
 
-    @GetMapping("/{id_profile}/journal/weight/")
+    @GetMapping("/{id_profile}/journal/weight")
     public ResponseEntity<?> getWeightings(@PathVariable("id_profile") Long idProfile,
                                                          @RequestParam(value = "page", defaultValue = "0") int page,
                                                          @RequestParam(value = "size", defaultValue = "10") int size,
@@ -80,8 +80,7 @@ public class WeightingRestController {
 
         if (profileCheck.checkProfile(idProfile)){
             try {
-                weightingDto.setProfile(profileService.get(idProfile));
-                weightingService.save(weightingDto);
+                weightingService.save(idProfile, weightingDto);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             } catch (IllegalArgumentException ex) {
                 return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -100,8 +99,7 @@ public class WeightingRestController {
         if (profileCheck.checkProfile(idProfile)){
             try {
                 LocalDateTime dtUpdateTime = timeConversion.conversionTime(dtUpdate);
-                weightingDto.setProfile(profileService.get(idProfile));
-                weightingService.update(weightingDto, idWeighting, dtUpdateTime);
+                weightingService.update(weightingDto, idWeighting, idProfile, dtUpdateTime);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (OptimisticLockException ex) {
                 return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);

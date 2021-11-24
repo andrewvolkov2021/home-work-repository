@@ -24,7 +24,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void save(ProductDto productDto){
+    public Product save(ProductDto productDto){
         Product product = new Product();
         product.setCreator(userHolder.getUser());
         product.setName(productDto.getName());
@@ -39,6 +39,7 @@ public class ProductService implements IProductService {
         product.setCreationDate(creationDate);
         product.setUpdateDate(creationDate);
         productDao.save(product);
+        return product;
     }
 
     @Override

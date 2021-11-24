@@ -11,9 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.OptimisticLockException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -29,11 +27,12 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
-    public void save(Profile profile) {
+    public Profile save(Profile profile) {
         LocalDateTime creationDate = LocalDateTime.now().withNano(0);
         profile.setCreationDate(creationDate);
         profile.setUpdateDate(creationDate);
         profileDao.save(profile);
+        return profile;
     }
 
     @Override
@@ -68,7 +67,7 @@ public class ProfileService implements IProfileService {
             updatedProfile.setTarget(profileDto.getTarget());
             updatedProfile.setTargetWeight(profileDto.getTargetWeight());
 
-            LocalDateTime updateDate = LocalDateTime.now();
+            LocalDateTime updateDate = LocalDateTime.now().withNano(0);
             updatedProfile.setUpdateDate(updateDate);
 
             profileDao.save(updatedProfile);

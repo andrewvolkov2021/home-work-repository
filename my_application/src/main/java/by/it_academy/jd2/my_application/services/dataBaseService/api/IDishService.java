@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public interface IDishService {
 
-    void save(DishDto dishDto) ;
+    Dish save(DishDto dishDto);
 
     Page<Dish> getAll(Pageable pageable);
 

@@ -5,13 +5,18 @@ import by.it_academy.jd2.my_application.models.Dish;
 import by.it_academy.jd2.my_application.models.User;
 import by.it_academy.jd2.my_application.models.api.ETypeOfEntity;
 import by.it_academy.jd2.my_application.security.UserHolder;
-import by.it_academy.jd2.my_application.services.audit.api.IAuditService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IAuditGeneralService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IUserService;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Service;
 
-public class DishAuditService implements IAuditService {
+import java.time.LocalDateTime;
+
+@Aspect
+@Service
+public class DishAuditService {
 
     private final IAuditGeneralService auditGeneralService;
     private final UserHolder userHolder;
@@ -23,17 +28,15 @@ public class DishAuditService implements IAuditService {
         this.userService = userService;
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.DishService.save(..))")
-    public void save(JoinPoint joinPoint) {
+    @AfterReturning(pointcut = "execution(* by.it_academy.jd2.my_application.services.dataBaseService.DishService.save(..))", returning = "result")
+    public void methodSaveDish(JoinPoint joinPoint, Object result) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Dish dish = (Dish) args[0];
+            Dish dish = (Dish) result;
 
             Audit audit = new Audit();
             audit.setCreationDate(dish.getCreationDate());
-            audit.setText("Создано блюдо " + dish.getId());
+            audit.setText("Создан Dish " + dish.getId());
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
@@ -42,51 +45,49 @@ public class DishAuditService implements IAuditService {
             auditGeneralService.save(audit);
 
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.DishService.update(..))")
-    public void update(JoinPoint joinPoint) {
+    @AfterReturning("execution(* by.it_academy.jd2.my_application.services.dataBaseService.DishService.update(..))")
+    public void methodUpdateDish(JoinPoint joinPoint) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Dish dish = (Dish) args[0];
+            Dish arg = (Dish) args[0];
 
             Audit audit = new Audit();
-            audit.setCreationDate(dish.getCreationDate());
-            audit.setText("Изменено блюдо " + dish.getId());
+            audit.setCreationDate(arg.getCreationDate());
+            audit.setText("Изменен Dish " + arg.getId());
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
             audit.setTypeOfEntity(ETypeOfEntity.DISH);
-            audit.setEntityId(dish.getId());
+            audit.setEntityId(arg.getId());
             auditGeneralService.save(audit);
+
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.DishService.delete(..))")
-    public void delete(JoinPoint joinPoint) {
+    @AfterReturning("execution(* by.it_academy.jd2.my_application.services.dataBaseService.DishService.delete(..))")
+    public void methodDeleteProduct(JoinPoint joinPoint) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Dish dish = (Dish) args[0];
-
+            Long id = (Long) args[0];
             Audit audit = new Audit();
-            audit.setCreationDate(dish.getCreationDate());
-            audit.setText("Удалено блюдо " + dish.getId());
+            audit.setCreationDate(LocalDateTime.now().withNano(0));
+            audit.setText("Удален Dish " + id);
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
             audit.setTypeOfEntity(ETypeOfEntity.DISH);
-            audit.setEntityId(dish.getId());
+            audit.setEntityId(id);
             auditGeneralService.save(audit);
+
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 }
+

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public interface IActiveService{
 
-    void save(ActiveDto activeDto);
+    Active save(ActiveDto activeDto);
 
     ActiveByDateDto findAllByProfileIdAndCreationDate(LocalDateTime start, LocalDateTime end,
                                                       Long id, Pageable pageable);

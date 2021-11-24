@@ -5,13 +5,18 @@ import by.it_academy.jd2.my_application.models.Product;
 import by.it_academy.jd2.my_application.models.User;
 import by.it_academy.jd2.my_application.models.api.ETypeOfEntity;
 import by.it_academy.jd2.my_application.security.UserHolder;
-import by.it_academy.jd2.my_application.services.audit.api.IAuditService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IAuditGeneralService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IUserService;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Service;
 
-public class ProductAuditService implements IAuditService {
+import java.time.LocalDateTime;
+
+@Aspect
+@Service
+public class ProductAuditService {
 
     private final IAuditGeneralService auditGeneralService;
     private final UserHolder userHolder;
@@ -23,17 +28,15 @@ public class ProductAuditService implements IAuditService {
         this.userService = userService;
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.ProductService.save(..))")
-    public void save(JoinPoint joinPoint) {
+    @AfterReturning(pointcut = "execution(* by.it_academy.jd2.my_application.services.dataBaseService.ProductService.save(..))", returning = "result")
+    public void methodSaveProduct(JoinPoint joinPoint, Object result){
         try {
             Object[] args = joinPoint.getArgs();
-
-            Product product = (Product) args[0];
+            Product product = (Product) result;
 
             Audit audit = new Audit();
             audit.setCreationDate(product.getCreationDate());
-            audit.setText("Создан продукт " + product.getId());
+            audit.setText("Создан Product " + product.getId());
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
@@ -42,51 +45,48 @@ public class ProductAuditService implements IAuditService {
             auditGeneralService.save(audit);
 
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.ProductService.update(..))")
-    public void update(JoinPoint joinPoint) {
+    @AfterReturning("execution(* by.it_academy.jd2.my_application.services.dataBaseService.ProductService.update(..))")
+    public void methodUpdateProduct(JoinPoint joinPoint) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Product product = (Product) args[0];
+            Product arg = (Product) args[0];
 
             Audit audit = new Audit();
-            audit.setCreationDate(product.getCreationDate());
-            audit.setText("Изменен продукт " + product.getId());
+            audit.setCreationDate(arg.getCreationDate());
+            audit.setText("Изменен Product " + arg.getId());
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
             audit.setTypeOfEntity(ETypeOfEntity.PRODUCT);
-            audit.setEntityId(product.getId());
+            audit.setEntityId(arg.getId());
             auditGeneralService.save(audit);
+
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.ProductService.delete(..))")
-    public void delete(JoinPoint joinPoint) {
+    @AfterReturning("execution(* by.it_academy.jd2.my_application.services.dataBaseService.ProductService.delete(..))")
+    public void methodDeleteProduct(JoinPoint joinPoint) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Product product = (Product) args[0];
-
+            Long id = (Long) args[0];
             Audit audit = new Audit();
-            audit.setCreationDate(product.getCreationDate());
-            audit.setText("Удален продукт " + product.getId());
+            audit.setCreationDate(LocalDateTime.now().withNano(0));
+            audit.setText("Удален Product " + id);
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
             audit.setTypeOfEntity(ETypeOfEntity.PRODUCT);
-            audit.setEntityId(product.getId());
-            auditGeneralService.save(audit);
+            audit.setEntityId(id);
+           auditGeneralService.save(audit);
+
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 }

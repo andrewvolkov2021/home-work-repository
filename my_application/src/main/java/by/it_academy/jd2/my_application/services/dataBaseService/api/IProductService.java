@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public interface IProductService {
 
-    void save(ProductDto productDto);
+    Product save(ProductDto productDto);
 
     Page<Product> getAll(Pageable pageable);
 

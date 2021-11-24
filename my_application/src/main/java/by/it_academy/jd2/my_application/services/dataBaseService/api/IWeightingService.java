@@ -12,13 +12,13 @@ public interface IWeightingService{
     WeightingByDateDto findAllByProfileIdAndCreationDate(LocalDateTime start, LocalDateTime end,
                                                          Long id, Pageable pageable);
 
-    void save(WeightingDto weightingDto);
+    Weighting save(Long id, WeightingDto weightingDto);
 
     Page<Weighting> getAll(Pageable pageable);
 
     Weighting get(Long id);
 
-    void update(WeightingDto weightingDto, Long id, LocalDateTime dtUpdate);
+    void update(WeightingDto weightingDto, Long id, Long idProfile, LocalDateTime dtUpdate);
 
     void delete(Long id, LocalDateTime dtUpdate);
 }

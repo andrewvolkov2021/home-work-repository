@@ -17,7 +17,7 @@ public interface IJournalService {
 
     List<Journal> findAllByProfile(Long id);
 
-    void save(JournalDto journalDto);
+    Journal save(JournalDto journalDto);
 
     Page<Journal> getAll (Pageable pageable);
 

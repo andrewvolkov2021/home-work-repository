@@ -5,13 +5,18 @@ import by.it_academy.jd2.my_application.models.Profile;
 import by.it_academy.jd2.my_application.models.User;
 import by.it_academy.jd2.my_application.models.api.ETypeOfEntity;
 import by.it_academy.jd2.my_application.security.UserHolder;
-import by.it_academy.jd2.my_application.services.audit.api.IAuditService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IAuditGeneralService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IUserService;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Service;
 
-public class ProfileAuditService implements IAuditService {
+import java.time.LocalDateTime;
+
+@Aspect
+@Service
+public class ProfileAuditService{
 
     private final IAuditGeneralService auditGeneralService;
     private final UserHolder userHolder;
@@ -23,17 +28,15 @@ public class ProfileAuditService implements IAuditService {
         this.userService = userService;
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.ProfileService.save(..))")
-    public void save(JoinPoint joinPoint) {
+    @AfterReturning(pointcut = "execution(* by.it_academy.jd2.my_application.services.dataBaseService.ProfileService.save(..))", returning = "result")
+    public void methodSaveProfile(JoinPoint joinPoint, Object result){
         try {
             Object[] args = joinPoint.getArgs();
-
-            Profile profile = (Profile) args[0];
+            Profile profile = (Profile) result;
 
             Audit audit = new Audit();
             audit.setCreationDate(profile.getCreationDate());
-            audit.setText("Создан профиль " + profile.getId());
+            audit.setText("Создан Profile " + profile.getId());
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
@@ -42,51 +45,48 @@ public class ProfileAuditService implements IAuditService {
             auditGeneralService.save(audit);
 
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.ProfileService.update(..))")
-    public void update(JoinPoint joinPoint) {
+    @AfterReturning("execution(* by.it_academy.jd2.my_application.services.dataBaseService.ProfileService.update(..))")
+    public void methodUpdateProfile(JoinPoint joinPoint) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Profile profile = (Profile) args[0];
+            Profile arg = (Profile) args[0];
 
             Audit audit = new Audit();
-            audit.setCreationDate(profile.getCreationDate());
-            audit.setText("Изменен профиль " + profile.getId());
+            audit.setCreationDate(arg.getCreationDate());
+            audit.setText("Изменен Profile " + arg.getId());
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
             audit.setTypeOfEntity(ETypeOfEntity.PROFILE);
-            audit.setEntityId(profile.getId());
+            audit.setEntityId(arg.getId());
             auditGeneralService.save(audit);
+
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.ProfileService.delete(..))")
-    public void delete(JoinPoint joinPoint) {
+    @AfterReturning("execution(* by.it_academy.jd2.my_application.services.dataBaseService.ProductService.delete(..))")
+    public void methodDeleteProfile(JoinPoint joinPoint) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Profile profile = (Profile) args[0];
-
+            Long id = (Long) args[0];
             Audit audit = new Audit();
-            audit.setCreationDate(profile.getCreationDate());
-            audit.setText("Удален профиль " + profile.getId());
+            audit.setCreationDate(LocalDateTime.now().withNano(0));
+            audit.setText("Удален Profile " + id);
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
             audit.setTypeOfEntity(ETypeOfEntity.PROFILE);
-            audit.setEntityId(profile.getId());
+            audit.setEntityId(id);
             auditGeneralService.save(audit);
+
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 }

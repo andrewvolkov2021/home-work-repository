@@ -5,13 +5,18 @@ import by.it_academy.jd2.my_application.models.Audit;
 import by.it_academy.jd2.my_application.models.User;
 import by.it_academy.jd2.my_application.models.api.ETypeOfEntity;
 import by.it_academy.jd2.my_application.security.UserHolder;
-import by.it_academy.jd2.my_application.services.audit.api.IAuditService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IAuditGeneralService;
 import by.it_academy.jd2.my_application.services.dataBaseService.api.IUserService;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Service;
 
-public class ActiveAuditService implements IAuditService {
+import java.time.LocalDateTime;
+
+@Aspect
+@Service
+public class ActiveAuditService{
 
     private final IAuditGeneralService auditGeneralService;
     private final UserHolder userHolder;
@@ -23,17 +28,15 @@ public class ActiveAuditService implements IAuditService {
         this.userService = userService;
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.ActiveService.save(..))")
-    public void save(JoinPoint joinPoint) {
+    @AfterReturning(pointcut = "execution(* by.it_academy.jd2.my_application.services.dataBaseService.ActiveService.save(..))", returning = "result")
+    public void methodSaveActive(JoinPoint joinPoint, Object result){
         try {
             Object[] args = joinPoint.getArgs();
-
-            Active active = (Active) args[0];
+            Active active = (Active) result;
 
             Audit audit = new Audit();
             audit.setCreationDate(active.getCreationDate());
-            audit.setText("Создана активность " + active.getId());
+            audit.setText("Создан Active " + active.getId());
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
@@ -42,51 +45,48 @@ public class ActiveAuditService implements IAuditService {
             auditGeneralService.save(audit);
 
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.ActiveService.update(..))")
-    public void update(JoinPoint joinPoint) {
+    @AfterReturning("execution(* by.it_academy.jd2.my_application.services.dataBaseService.ActiveService.update(..))")
+    public void methodUpdateActive(JoinPoint joinPoint) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Active active = (Active) args[0];
+            Active arg = (Active) args[0];
 
             Audit audit = new Audit();
-            audit.setCreationDate(active.getCreationDate());
-            audit.setText("Изменена активность " + active.getId());
+            audit.setCreationDate(arg.getCreationDate());
+            audit.setText("Изменен Active " + arg.getId());
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
             audit.setTypeOfEntity(ETypeOfEntity.ACTIVE);
-            audit.setEntityId(active.getId());
+            audit.setEntityId(arg.getId());
             auditGeneralService.save(audit);
+
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 
-    @Override
-    @After("execution(by.it_academy.jd2.my_application.services.dataBaseService.ActiveService.delete(..))")
-    public void delete(JoinPoint joinPoint) {
+    @AfterReturning("execution(* by.it_academy.jd2.my_application.services.dataBaseService.ProductService.delete(..))")
+    public void methodDeleteActive(JoinPoint joinPoint) {
         try {
             Object[] args = joinPoint.getArgs();
-
-            Active active = (Active) args[0];
-
+            Long id = (Long) args[0];
             Audit audit = new Audit();
-            audit.setCreationDate(active.getCreationDate());
-            audit.setText("Удалена активность " + active.getId());
+            audit.setCreationDate(LocalDateTime.now().withNano(0));
+            audit.setText("Удален Active " + id);
             String login = userHolder.getAuthentication().getName();
             User user = userService.findByLogin(login);
             audit.setUser(user);
-            audit.setTypeOfEntity(ETypeOfEntity.PRODUCT);
-            audit.setEntityId(active.getId());
+            audit.setTypeOfEntity(ETypeOfEntity.ACTIVE);
+            audit.setEntityId(id);
             auditGeneralService.save(audit);
+
         } catch (Throwable e) {
-            throw new RuntimeException("Ошибка при создании события Audit");
+            e.printStackTrace();
         }
     }
 }
